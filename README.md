@@ -49,7 +49,8 @@ run the python commands in the following sequence
 List of tables and programs
 ---------------------------
 
-| Figure/Table #    | Program                  | Line Number | Output file                      |
+| Figure/Table #    | Program                  | Line Number | Output file
+|-------------------|--------------------------|-------------|---------------------------------------|
 | Figure 3          | juryPlotsAndResults.py   | 67          |exhibits/beta_1-5_dist.pdf
 | Figure 3          | juryPlotsAndResults.py   | 87          |exhibits/beta_2-4_dist.pdf
 | Figure 3          | juryPlotsAndResults.py   | 111         |exhibits/beta_3-4_dist.pdf
