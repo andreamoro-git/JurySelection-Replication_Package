@@ -37,7 +37,7 @@ Description of programs/code
 
 ### License for Code
 
-- the code is Copyright Moro and Van der Linden. Please contact the authors in interested in modifying the Code
+- the code is © Moro and Van der Linden. Please contact the authors in interested in using or modifying this code.
 
 Instructions to Replicators
 ---------------------------
