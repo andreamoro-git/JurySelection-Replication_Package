@@ -16,7 +16,7 @@ class Jurymodel():
         J : number of jurors
         D : number of defense challenges
         P : number of prosecution challenges
-        R : proportion of type 1 jurors
+        R : proportion of type 1 jurors (note: = 1-r in the paper's notation)
         fx0: dict defining x distribution and its parameters for type 0 jurors
         fx1: dict defining x distribution and its parameters for type 1 jurors
             uniform example: {'f': 'uniform', 'lb' : 0, 'ub': 0.75},
@@ -472,10 +472,7 @@ if __name__ == '__main__':
     j1 = model.fxdraw()
     s1 = model.simulateSTRjury(draw=j1)
 
-    resultbeta = model.manyJuries(2001)
-
-
-
+    resultbeta = model.manyJuries(2501)
  #   print(model.computeMoments(resultbeta['juriestSTR'],resultbeta['numChDSTR'],resultbeta['numChPSTR']))
 
  #   print(np.average(np.sum(1-resultbeta['juriestSAR'],axis=1)))
@@ -485,9 +482,3 @@ if __name__ == '__main__':
     print(np.average(resultbeta['juriesxRAN']))
     print(np.average(resultbeta['juriestRAN']))
 #    print('time: ',time.time()-timenow)
-
-    # 1.0594059405940595
-    # 3.0
-    # 0.6566066831683168
-    # 0.6655201320132014
-    # 0.6216763201320132
