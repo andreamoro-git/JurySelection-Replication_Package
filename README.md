@@ -31,9 +31,9 @@ The code does not require large memory. The code was last run on a 1.7 GHz Quad-
 Description of programs/code
 ----------------------------
 
-- class_model_types.py contains the main Jurymodel class used to simulate juries
+- class_model_types.py contains the main Jurymodel class used to simulate juries.
 - juryConstruction.py contains code to generate all simulated juries needed to generate the paper figures and tables. Juries are saved in pickle format under output/
-- juryPlotsAndResults contains code to generate all figures and tables. Output is saved under exhibits/
+- juryPlotsAndResults.py contains code to generate all figures and tables. Output is saved under exhibits/
 
 ### License for Code
 
@@ -46,7 +46,7 @@ run the python commands in the following sequence
 1) python juryConstruction.py
 2) python juryPlotsAndResults.py
 
-List of tables and programs
+List of figures, tables and programs
 ---------------------------
 
 | Figure/Table #    | Program                  | Line Number | Output file
