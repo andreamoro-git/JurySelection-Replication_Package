@@ -1,6 +1,6 @@
 # JurySelection-Replication_Package
 
-Replication package for Moro-Van der Linden: "Exclusion of Extreme Jurors and Minority Representation:The Effect of Jury Selection Procedures"
+Replication package for Andrea Moro Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
 
 Overview
 --------
@@ -22,7 +22,7 @@ Computational requirements
   - `matplotlib` 3.3.4
   - `scipy` 1.6.2
 
-We ran the code both using the Spyder 5.0 GUI and from Python's command line.
+We ran the code both using the Spyder 5.0.5 GUI and from Python's command line.
 
 ### Memory and Runtime Requirements
 
@@ -37,7 +37,7 @@ Description of programs/code
 
 ### License for Code
 
-- the code is © Moro and Van der Linden. Please contact the authors in interested in using or modifying this code.
+- the code is © Moro and Van der Linden. Please contact the authors if interested in using or modifying this code.
 
 Instructions to Replicators
 ---------------------------
