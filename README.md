@@ -1,6 +1,6 @@
 # JurySelection-Replication_Package
 
-Replication package for Andrea Moro Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
+Replication package for Andrea Moro and Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
 
 Overview
 --------
