@@ -60,7 +60,7 @@ ax.set_xlim(-0.01,1.01)
 ax.set_xlabel('Conviction probability')
 
 plt.plot(x,ya,color='Olive',label='$f_a(c)$: $Beta(1,5)$')
-plt.plot(x,yb,color='DarkOrange',label='$f_b(c)$: $Beta(5,1)$')
+plt.plot(x,yb,'--',color='DarkOrange',label='$f_b(c)$: $Beta(5,1)$')
 ax.legend(loc='center')
 fig.tight_layout()
 
@@ -80,7 +80,7 @@ ax.set_xlim(-0.01,1.01)
 ax.set_xlabel('Conviction probability')
 
 plt.plot(x,ya,color='Olive',label='$f_a(c)$: $Beta(2,4)$')
-plt.plot(x,yb,color='DarkOrange',label='$f_b(c)$: $Beta(4,2)$')
+plt.plot(x,yb,'--',color='DarkOrange',label='$f_b(c)$: $Beta(4,2)$')
 ax.legend(loc='center')
 fig.tight_layout()
 
@@ -100,7 +100,7 @@ ax.set_xlim(-0.01,1.01)
 ax.set_xlabel('Conviction probability $c$')
 
 plt.plot(x,ya,color='Olive',label='$f_a(c)$: $Beta(3,4)$')
-plt.plot(x,yb,color='DarkOrange',label='$f_b(c)$: $Beta(4,3)$')
+plt.plot(x,yb,'--',color='DarkOrange',label='$f_b(c)$: $Beta(4,3)$')
 # from labellines import labelLines
 # plt.gca().get_lines()
 # labelLines(plt.gca().get_lines(), align=False, xvals= [0.25,0.82], fontsize=11)
@@ -149,12 +149,12 @@ ax.set_xlabel('Threshold $\\underline{c}$')
 ax.set_ylabel('Fraction of juries')
 
 ax.plot(xx, nLess_c_RAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{S\&R')
+ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{REP')
 ax.plot(xx, nLess_c_STR, '--', color='Olive', label='\\textit{STR}')
 #ax.legend(loc="lower right")
 labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
-                      xvals = [.08,.3,.4],
-                      yoffsets=[.18,.18, -.3],
+                      xvals = [.1,.25,.4],
+                      yoffsets=[.18,.07, -.1],
                       bbox={'alpha': 0},
                             )
 fig.tight_layout()
@@ -168,7 +168,7 @@ textstring += '\n verify: '+str(xx[10:11])
 textstring += '\n STR' +str(nLess_c_STR[10:11])
 textstring += '\n SAR' +str(nLess_c_SAR[10:11])
 textstring += '\n RAN' +str(nLess_c_RAN[10:11])
-
+#%%
 ## moderate polarization
 fname = gzip.open(outputdir+'beta-2-4-12j-75pcT1.pickle.gz','rb')
 resultuni = pickle.load(fname)
@@ -204,12 +204,12 @@ ax.set_xlabel('Threshold $\\underline{c}$')
 ax.set_ylabel('Fraction of juries')
 
 ax.plot(xx, nLess_c_RAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{S\&R')
+ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{REP')
 ax.plot(xx, nLess_c_STR, '--', color='Olive', label='\\textit{STR}')
 #ax.legend(loc="lower right")
 labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
-                      xvals = [.09,.29,.4],
-                      yoffsets=[.23,.18, -.3],
+                      xvals = [.09,.24,.4],
+                      yoffsets=[.26,.12, -.22],
                       bbox={'alpha': 0},
                             )
 fig.tight_layout()
@@ -223,7 +223,7 @@ textstring += '\n STR ' +str(nLess_c_STR[24:25])
 textstring += '\n SAR ' +str(nLess_c_SAR[24:25])
 textstring += '\n RAN ' +str(nLess_c_RAN[24:25])
 
-## mild polarization
+#%% mild polarization
 fname = gzip.open(outputdir+'beta-3-4-12j-75pcT1.pickle.gz','rb')
 resultuni = pickle.load(fname)
 baseargs = resultuni['baseargs']
@@ -259,7 +259,7 @@ ax.set_xlabel('Threshold $\\underline{c}$')
 ax.set_ylabel('Fraction of juries')
 
 ax.plot(xx, nLess_c_RAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{S\&R')
+ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{REP')
 ax.plot(xx, nLess_c_STR, '--', color='Olive', label='\\textit{STR}')
 #ax.legend(loc="upper left")
 #ax2.legend(loc="center left")
@@ -324,7 +324,7 @@ ax.set_xlabel('Threshold $\\underline{c}$')
 ax.set_ylabel('Fraction of juries')
 
 ax.plot(xx, nLess_c_RAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{S\&R')
+ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{REP')
 ax.plot(xx, nLess_c_STR, '--', color='Olive', label='\\textit{STR}')
 #ax.legend(loc="center left")
 labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=12,
@@ -356,7 +356,7 @@ ax.set_ylabel('Density')
 ax.set_xlabel('Conviction probability $c$')
 
 ax.plot(xx, RAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(xx, SAR, '', color='DarkOrange', label='\\textit{S\&R}')
+ax.plot(xx, SAR, '', color='DarkOrange', label='\\textit{REP}')
 ax.plot(xx, STR, '--', color='Olive', label='\\textit{STR}')
 
 #ax.legend()
@@ -405,7 +405,7 @@ ax.set_yticks(np.arange(0,0.41,0.1))
 ax.set_xticks(np.arange(0,0.41,0.1))
 
 ax.plot(Rvector, avRAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(Rvector, avSAR, '', color='DarkOrange', label='\\textit{S\&R}')
+ax.plot(Rvector, avSAR, '', color='DarkOrange', label='\\textit{REP}')
 ax.plot(Rvector, avSTR, '--', color='Olive', label='\\textit{STR}')
 
 fig.tight_layout()
@@ -623,7 +623,7 @@ if __name__ == '__main__':
     ax.set_xticks(np.arange(0,len(challenges)+1,2))
     ax.set_xlabel('Number of challenges')
     ax.set_ylabel('Fraction of juries')
-    ax.plot(challenges, nLess_c_SAR, marker='s', color='darkorange', label='\\textit{S\&R}', linewidth=.6, markersize=4)
+    ax.plot(challenges, nLess_c_SAR, marker='s', color='darkorange', label='\\textit{REP}', linewidth=.6, markersize=4)
     ax.plot(challenges, nLess_c_STR, '--', marker='*',color='Olive', label='\\textit{STR}', linewidth=.6, markersize=4)
     #ax.legend(loc='center right')
     labellines.labelLines(plt.gca().get_lines(), align=False, yoffsets=[.06,.03], bbox={'alpha': 0}, fontsize=13, )# align=False)
@@ -637,7 +637,7 @@ if __name__ == '__main__':
     ax.set_xticks(np.arange(0,len(challenges)+1,2))
     ax.set_xlabel('Number of challenges')
     ax.set_ylabel('Fraction of minorities')
-    ax.plot(challenges, minSAR, marker='s', color='darkorange', label='\\textit{S\&R}', linewidth=.6, markersize=4)
+    ax.plot(challenges, minSAR, marker='s', color='darkorange', label='\\textit{REP}', linewidth=.6, markersize=4)
     ax.plot(challenges, minSTR, '--', marker='*',color='Olive', label='\\textit{STR}', linewidth=.6, markersize=4)
     #ax.legend(loc='center right')
     labellines.labelLines(plt.gca().get_lines(), align=False, yoffsets=[.01,.006], bbox={'alpha': 0}, fontsize=13, )# align=False)
@@ -714,13 +714,13 @@ ax.set_ylabel('Fraction of juries (difference with \\textit{RAN})')
 shift=.2
 
 # ax.bar(x-2*shift,prgmed50STR[6:13]-prgmed50RAN[6:13],width=shift,color='Olive',label='\\textit{STR}')
-# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color='SaddleBrown',label='\\textit{S\&R}, $r=.90$')
-# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color='DarkOrange',label='\\textit{S\&R}, $r=.75$')
-# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{S\&R}, $r=.5$')
+# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color='SaddleBrown',label='\\textit{REP}, $r=.90$')
+# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color='DarkOrange',label='\\textit{REP}, $r=.75$')
+# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color='Olive',label='\\textit{STR}',linewidth=.8)
-ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\parbox{5em}{\\textit{S\&R},\\newline $r=.10$}',linewidth=.8, markersize=4)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{S\&R}, $r=.25$',linewidth=.8, markersize=4)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{S\&R}, $r=.5$',linewidth=.8, markersize=4)
+ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\parbox{5em}{\\textit{REP},\\newline $r=.10$}',linewidth=.8, markersize=4)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{REP}, $r=.25$',linewidth=.8, markersize=4)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{REP}, $r=.5$',linewidth=.8, markersize=4)
 fig.tight_layout()
 #ax.legend()
 labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
@@ -886,7 +886,7 @@ ax.set_xlabel('Conviction probability $c$')
 ax.set_ylabel('Fraction of juries')
 
 ax.plot(xx, nLess_c_RAN, ':', color='saddlebrown', linewidth=2, label='\\textit{RAN}')
-ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{S\&R')
+ax.plot(xx, nLess_c_SAR, '', color='DarkOrange', label='\\textit{REP')
 ax.plot(xx, nLess_c_STR, '--', color='Olive', label='\\textit{STR}')
 ax.legend(loc="lower right")
 #ax2.legend(loc="center left")
@@ -1112,13 +1112,13 @@ ax.set_ylabel('Probability (difference with \\textit{RAN})')
 shift=.2
 
 # ax.bar(x-2*shift,prgmed50STR[6:13]-prgmed50RAN[6:13],width=shift,color='Olive',label='\\textit{STR}')
-# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color='SaddleBrown',label='\\textit{S\&R}, $r=.90$')
-# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color='DarkOrange',label='\\textit{S\&R}, $r=.75$')
-# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{S\&R}, $r=.5$')
+# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color='SaddleBrown',label='\\textit{REP}, $r=.90$')
+# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color='DarkOrange',label='\\textit{REP}, $r=.75$')
+# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color='Olive',label='\\textit{STR}',linewidth=.8)
-ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\textit{S\&R}, $r=.90$',linewidth=.8)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{S\&R}, $r=.75$',linewidth=.8)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{S\&R}, $r=.5$',linewidth=.8)
+ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\textit{REP}, $r=.90$',linewidth=.8)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{REP}, $r=.75$',linewidth=.8)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{REP}, $r=.5$',linewidth=.8)
 fig.tight_layout()
 ax.legend()
 plt.savefig(imagedir+'median-2-4.pdf')
@@ -1194,13 +1194,13 @@ ax.set_ylabel('Probability (difference with \\textit{RAN})')
 shift=.2
 
 # ax.bar(x-2*shift,prgmed50STR[6:13]-prgmed50RAN[6:13],width=shift,color='Olive',label='\\textit{STR}')
-# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color='SaddleBrown',label='\\textit{S\&R}, $r=.90$')
-# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color='DarkOrange',label='\\textit{S\&R}, $r=.75$')
-# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{S\&R}, $r=.5$')
+# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color='SaddleBrown',label='\\textit{REP}, $r=.90$')
+# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color='DarkOrange',label='\\textit{REP}, $r=.75$')
+# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color='Olive',label='\\textit{STR}',linewidth=.8)
-ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\textit{S\&R}, $r=.90$',linewidth=.8)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{S\&R}, $r=.75$',linewidth=.8)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{S\&R}, $r=.5$',linewidth=.8)
+ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\textit{REP}, $r=.90$',linewidth=.8)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{REP}, $r=.75$',linewidth=.8)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{REP}, $r=.5$',linewidth=.8)
 fig.tight_layout()
 ax.legend()
 plt.savefig(imagedir+'median-3-4.pdf')
