@@ -708,7 +708,7 @@ fig,ax = plt.subplots(figsize=(4,3))
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.set_xlim(6.8,12.05)
-ax.set_ylim(-0.015,0.09)
+ax.set_ylim(-0.02,0.09)
 ax.set_xlabel('Minimum number of jurors below the median')
 ax.set_ylabel('Fraction of juries (difference with \\textit{RAN})')
 shift=.2
@@ -719,13 +719,13 @@ shift=.2
 # ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color='Olive',label='\\textit{STR}',linewidth=.8)
 ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\parbox{5em}{\\textit{REP},\\newline $r=.10$}',linewidth=.8, markersize=4)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{REP}, $r=.25$',linewidth=.8, markersize=4)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{REP}, $r=.5$',linewidth=.8, markersize=4)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color='DarkOrange',label='\\textit{REP}, $r=.25$',linewidth=.8, markersize=4)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='Goldenrod',label='\\textit{REP}, $r=.5$',linewidth=.8, markersize=4)
 fig.tight_layout()
 #ax.legend()
 labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
-                      xvals = [10.5,8.3,8.35,8.5],
-                      yoffsets=[0.012,-0.009,-0.012,-0.013],
+                      xvals = [10.5,7.3,8.35,8.5],
+                      yoffsets=[0.012,+0.019,-0.012,-0.016],
                       bbox={'alpha': 0},
                             )
 plt.savefig(imagedir+'median.pdf')
@@ -1117,8 +1117,8 @@ shift=.2
 # ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color='Olive',label='\\textit{STR}',linewidth=.8)
 ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\textit{REP}, $r=.90$',linewidth=.8)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{REP}, $r=.75$',linewidth=.8)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{REP}, $r=.5$',linewidth=.8)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color='DarkOrange',label='\\textit{REP}, $r=.75$',linewidth=.8)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='goldenrod',label='\\textit{REP}, $r=.5$',linewidth=.8)
 fig.tight_layout()
 ax.legend()
 plt.savefig(imagedir+'median-2-4.pdf')
@@ -1199,8 +1199,8 @@ shift=.2
 # ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color='Olive',label='\\textit{STR}',linewidth=.8)
 ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color='SaddleBrown',label='\\textit{REP}, $r=.90$',linewidth=.8)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],marker='o',color='DarkOrange',label='\\textit{REP}, $r=.75$',linewidth=.8)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],marker='^',color='Gold',label='\\textit{REP}, $r=.5$',linewidth=.8)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color='DarkOrange',label='\\textit{REP}, $r=.75$',linewidth=.8)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='goldenrod',label='\\textit{REP}, $r=.5$',linewidth=.8)
 fig.tight_layout()
 ax.legend()
 plt.savefig(imagedir+'median-3-4.pdf')
