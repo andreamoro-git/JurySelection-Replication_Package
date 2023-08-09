@@ -1,11 +1,11 @@
 # JurySelection-Replication_Package
 
-Replication package for Andrea Moro and Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
+Replication package for Andrea Moro and Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." (2023), Forthcoming, Journal of Law and Economics. The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
 
 Overview
 --------
 
-The code in this replication package constructs the simulated juries used to generate figures, tables, and other results in Moro and Van der Linden (2021) using Python.
+The code in this replication package constructs the simulated juries used to generate figures, tables, and other results in Moro and Van der Linden (2023) using Python.
 
 Data Availability and Provenance Statements
 ----------------------------
@@ -41,7 +41,12 @@ Description of programs/code
 
 Instructions to Replicators
 ---------------------------
-run the python commands in the following sequence
+A Dockerfile is included under Environments to replicate an environment suitable for proper code execution
+After creating the docker image (with tag juryimage, that is run "docker build -t juryimage Environment/"), run the following command from the project root directory:
+
+docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh
+
+Run the python commands in the following sequence using Code as working directory
 
 1) python juryConstruction.py
 2) python juryPlotsAndResults.py

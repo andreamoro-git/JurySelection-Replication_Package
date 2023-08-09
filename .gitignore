@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 
 .DS_Store
-./output/*.gz
+*.gz
+*.pdf
+*.tex
+*.txt
