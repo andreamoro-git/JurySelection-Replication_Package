@@ -2,10 +2,23 @@
 
 Replication package for Andrea Moro and Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." (2023), Forthcoming, Journal of Law and Economics. The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
 
+Bibtex Citation:
+
+@article{moro-vanderlinden-juryselection-2023,
+    title = "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures",
+    author = "Moro, Andrea and Martin {Van der Linden}",
+    year = "Forthcoming",
+    month = "",
+    journal = "Journal of Law and Economics",
+    volume = "2102.07222",
+    url = "http://andreamoro.net/assets/papers/juryselection.pdf"
+}
+
+
 Overview
 --------
 
-The code in this replication package constructs the simulated juries used to generate figures, tables, and other results in Moro and Van der Linden (2023) using Python.
+The code in this replication package constructs the simulated juries used to generate figures, tables, and other results in Moro and Van der Linden (Journal of Law and Economics, Forthcoming 2023) using Python.
 
 Data Availability and Provenance Statements
 ----------------------------
@@ -29,11 +42,12 @@ We ran the code both using the Spyder 5.0.5 GUI, from Python's command line, and
 
 ### Memory and Runtime Requirements
 
-The code does not require large memory. The code was last run on a 1.7 GHz Quad-Core Intel Core i7 Intel-based laptop with MacOS version 11.4. Execution time was less than 30 minutes.
+The code does not require large memory. The code was last run on a 1.7 GHz Quad-Core Intel Core i7 Intel-based laptop with MacOS version 11.4. Execution time was about one hour.
 
 Description of programs/code
 ----------------------------
 
+- execute_all.sh Executes all code in the approprate order
 - class_model_types.py contains the main Jurymodel class used to simulate juries.
 - juryConstruction.py contains code to generate all simulated juries needed to generate the paper figures and tables. Juries are saved in pickle format under output/
 - juryPlotsAndResults.py contains code to generate all figures and tables. Output is saved under exhibits/
@@ -50,32 +64,33 @@ generates all simulated juries needed for the statistical discrimination section
 Instructions to Replicators
 ---------------------------
 
-## Using Docker
+### Using Docker
 A Dockerfile is included under directory Environments to replicate an environment suitable for proper code execution
 After creating the docker image (with tag juryimage, that is run "docker build -t juryimage Environment/"), run the following command from the project root directory:
 
 docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh
 
-## Using a python installation
+### Using a python installation (recommended)
 A pip freeze text file with required packages is included under Environments
 
-## Notes
+### Notes
 
-a) running the code with docker will not format some of the figure labels with LaTeX. To generate LaTeX-formatted figures you need to have a LaTeX distribution in your system and then run the python commands in the following sequence using Code as working directory
+a) running the code with docker will not format some of the figure labels with LaTeX, and some of the spacing will not match exactly the article figures. To generate LaTeX-formatted figures you need to have a LaTeX distribution in your system and then run the python commands in the following sequence using Code as working directory
 
   1) python juryConstruction.py
   2) python juryPlotsAndResults.py
   3) python juryStatdisc_sims.py
   4) python juryStatdisc_plots.py
 
-b) Some jury construction commands use the multiprocessing package with 6 processors to speed up computations. You may change the nprocs variable at the beginning of juryConstruction.py and juryStatdisc_sims.py at your convenience
+b) To speed up computations, some jury construction commands use Python's multiprocessing package with 6 processors as default. You may change the nprocs variable at the beginning of juryConstruction.py (row 17) and juryStatdisc_sims.py (row 20) at your convenience
 
 List of figures, tables and programs
 ---------------------------
 
 | Figure/Table # | Program                  | Line | Output file
 |----------------|--------------------------|-------------|-------------------------------|
-| Figure 1       | TixZ-generated in LaTeX  |      |                                      |
+| Figure 1       | TikZ-generated in LaTeX  |      |                                      |
+| Figure 2       | TikZ-generated in LaTeX  |      |                                      |
 | Figure 3       | juryPlotsAndResults.py   | 140  |  betapdfs.pdf                        |  
 | Figure 4       | juryPlotsAndResults.py   | 219  |  prop1-beta-all.pdf                  | 
 | Figure 5       | juryPlotsAndResults.py   | 302  |  prop2-uni.pdf                       | 
@@ -91,3 +106,5 @@ List of figures, tables and programs
 
 ## Acknowledgements
 Social Science Data Editors template README file https://github.com/social-science-data-editors/template_README
+
+Tip for generating the list of figures above: https://andreamoro.net/blog/2021/06/01/generate-list-figures-with-code-references.html
