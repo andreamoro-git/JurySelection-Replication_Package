@@ -17,6 +17,8 @@ from scipy.stats import gaussian_kde
 
 savefig = True
 
+nprocs = 6
+
 STRcolor = 'olive'
 SARcolor = 'Darkorange'
 RANcolor = 'SaddleBrown'
@@ -98,8 +100,6 @@ if __name__ == '__main__':
         newkw = deepcopy(baseargs)
         newkw['N'] = N
         iterlist.append((newkw))
-        
-    nprocs = 6
 
     pool = Pool(processes=nprocs)
     allSignals = pool.map(Jurypool,(iterlist))
@@ -147,8 +147,6 @@ if __name__ == '__main__':
         newkw = deepcopy(baseargs2)
         newkw['N'] = N
         iterlist.append((newkw))
-        
-    nprocs = 6
 
     pool = Pool(processes=nprocs)
     allSignals = pool.map(Jurypool,(iterlist))
@@ -198,8 +196,6 @@ if __name__ == '__main__':
         newkw = deepcopy(baseargs)
         newkw['N'] = signals
         iterlist.append((newkw))
-        
-    nprocs = 6
 
     pool = Pool(processes=nprocs)
     allSignals = pool.map(Jurypool,(iterlist))
@@ -246,8 +242,6 @@ if __name__ == '__main__':
         newkw = deepcopy(baseargs)
         newkw['N'] = signals
         iterlist.append((newkw))
-        
-    nprocs = 6
 
     pool = Pool(processes=nprocs)
     allSignals = pool.map(Jurypool,(iterlist))
