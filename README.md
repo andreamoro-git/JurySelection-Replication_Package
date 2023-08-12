@@ -68,12 +68,14 @@ Instructions to Replicators
 
 ### Using Docker
 A Dockerfile is included under directory Environment to replicate an environment suitable for proper code execution
+
 After creating the docker image (with tag juryimage, that is run ```docker build -t juryimage Environment/``` from the package root), run the following command from the package root directory:
 
 ```docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh```
 
 ### Using a python installation (recommended, see note b) below)
-A pip freeze text file with required packages is included under directory Environment
+
+A pip freeze text file with required packages is included under directory Environment. Execute execute_all.sh, or run the python files in the order indicated in execute_all.sh
 
 ### Notes
 
