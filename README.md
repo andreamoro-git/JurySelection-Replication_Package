@@ -31,13 +31,14 @@ Computational requirements
 
 ### Software Requirements
 
-- Python 3.9.1
+- Python 3.9.17
   A pip freeze text file with required packages is included under Environments
   In particular, the following are needed
-  - `numpy` 1.20.2
-  - `matplotlib` 3.6.2
-  - `scipy` 1.6.2
-  - `labellines` 0.6.0
+  - `numpy`==1.25.2 
+  - `matplotlib`==3.7.2 
+  - `pandas`==1.5.3 
+  - `scipy`==1.10.1 
+  - `matplotlib-label-lines`==0.6.0 
 
 We ran the code both using the Spyder 5.0.5 GUI, from Python's command line, and with the included Docker image
 
@@ -48,15 +49,15 @@ The code does not require large memory. The code was last run on a 1.7 GHz Quad-
 Description of programs/code
 ----------------------------
 
-- execute_all.sh Executes all code in the approprate order
+- execute_all.sh Executes all code in the appropriate order
 - class_model_types.py contains the main Jurymodel class used to simulate juries.
-- juryConstruction.py contains code to generate all simulated juries needed to generate the paper figures and tables. Juries are saved in pickle format under output/
+- juryConstruction.py contains code to generate all simulated juries needed to generate the paper and appendices figures and tables. Juries are saved in pickle format under output/
 - juryPlotsAndResults.py contains code to generate all figures and tables. Output is saved under exhibits/
 - class_jury_Statdisc.py
 extension of class_model_types.py to run simulations for the statistical discrimination section
 - juryStatdisc_sims.py
 generates all simulated juries needed for the statistical discrimination section
-- juryStatdisc_plots.py generates figures for the statistical discrimination section.
+- juryStatdisc_plots.py generates figures for the statistical discrimination section
 
 ### License for Code
 
@@ -66,13 +67,13 @@ Instructions to Replicators
 ---------------------------
 
 ### Using Docker
-A Dockerfile is included under directory Environments to replicate an environment suitable for proper code execution
-After creating the docker image (with tag juryimage, that is run "docker build -t juryimage Environment/"), run the following command from the project root directory:
+A Dockerfile is included under directory Environment to replicate an environment suitable for proper code execution
+After creating the docker image (with tag juryimage, that is run ```docker build -t juryimage Environment/``` from the package root), run the following command from the package root directory:
 
-docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh
+```docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh```
 
-### Using a python installation (recommended)
-A pip freeze text file with required packages is included under Environments
+### Using a python installation (recommended, see note b) below)
+A pip freeze text file with required packages is included under directory Environment
 
 ### Notes
 
