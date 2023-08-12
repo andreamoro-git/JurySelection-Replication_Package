@@ -100,8 +100,8 @@ List of figures, tables and programs
 | Figure 8       | juryPlotsAndResults.py   | 710  |  nchallenges-extr-minority.pdf       | 
 | Figure 9       | juryStatdisc_plots.py    | 196  |  std-logitnorm.pdf                   | 
 | Figure 10      | juryStatdisc_plots.py    | 251  |  std-density-1.pdf                   |
-| Figure 11      | juryPlotsAndResults.py   | 792  |  median.pdf                          | 
-| Figure 12      | juryPlotsAndResults.py   | 1017 |  balanced.pdf                        |
+| Figure 11      | juryPlotsAndResults.py   | 793  |  median.pdf                          | 
+| Figure 12      | juryPlotsAndResults.py   | 1018 |  balanced.pdf                        |
 | Figure 13      | juryStatdisc_plots.py    | 320  |  std-beta.pdf                        | 
 
 
