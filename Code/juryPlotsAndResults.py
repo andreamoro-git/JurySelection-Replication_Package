@@ -19,8 +19,8 @@ RANcolor = 'SaddleBrown'
 altcolor = 'Sienna'
 edgecolor = 'White'
 alt2color = 'GoldenRod'
-barcolors = [SARcolor, STRcolor]
-barcolor2 = [SARcolor, STRcolor]
+barcolors = [SARcolor, STRcolor, RANcolor]
+barcolor2 = [SARcolor, STRcolor, RANcolor]   
 
 publishedFigures = False
 
@@ -28,7 +28,7 @@ if publishedFigures == True:
 
     # JLaw&Econ requirement
     STRcolor = SARcolor = RANcolor = edgecolor = alt2color = 'Black'
-    barcolors = barcolor2 = ['White']*2
+    barcolors = barcolor2 = ['White']*3
     altcolor =  'White'
 
 figsize = 4.5
@@ -112,7 +112,7 @@ alpha = 4
 beta = 3
 yb_m = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 
-fig,(axx,axd,axm) = plt.subplots(1, 3, figsize=(figsize,figsize*1/2+.2), constrained_layout=True)
+fig,(axx,axd,axm) = plt.subplots(1, 3, figsize=(figsize,figsize*1/2+.2))
 
 for ax in [axx,axd,axm]: 
     ax.spines['right'].set_visible(False)
@@ -939,13 +939,13 @@ def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
     key = 0
     multiplier = 0
     offset = width * multiplier 
-    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, color='white', hatch=hatchrep+[''], edgecolor = edgecolor)
+    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, color=barcolors[0], hatch=hatchrep+[''], edgecolor = edgecolor)
     ax1.bar_label(rects, padding=3)
     multiplier += 1    
 
     key += 1 
     offset = width * multiplier 
-    rects = ax1.bar(np.arange(3) + offset, values['STR'], width, label=['STR']*3, color='white', hatch=hatchstr, edgecolor = edgecolor)
+    rects = ax1.bar(np.arange(3) + offset, values['STR'], width, label=['STR']*3, color=barcolors[1], hatch=hatchstr, edgecolor = edgecolor)
     ax1.bar_label(rects, padding=3)
     multiplier += 1    
 
@@ -953,13 +953,13 @@ def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
     key = 0
     multiplier=0
     offset = width * multiplier 
-    rects = ax2.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color='white', hatch=hatchrep+[''], edgecolor = edgecolor)
+    rects = ax2.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color=barcolors[0], hatch=hatchrep+[''], edgecolor = edgecolor)
     ax2.bar_label(rects, padding=3)
     multiplier += 1    
 
     key += 1 
     offset = width * multiplier
-    rects = ax2.bar(np.arange(3) + offset, v2['STR'], width, label=['STR']*3, color='white', hatch=hatchstr, edgecolor = edgecolor)
+    rects = ax2.bar(np.arange(3) + offset, v2['STR'], width, label=['STR']*3, color=barcolors[1], hatch=hatchstr, edgecolor = edgecolor)
     ax2.bar_label(rects, padding=3)
     multiplier += 1    
 
@@ -967,13 +967,13 @@ def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
     key = 0
     multiplier = 0
     offset = width * multiplier
-    rects = ax3.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color='white', hatch=hatchrep+[''], edgecolor = edgecolor)
+    rects = ax3.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color=barcolors[0], hatch=hatchrep+[''], edgecolor = edgecolor)
     ax3.bar_label(rects, padding=3)
     multiplier += 1    
 
     key += 1 
     offset = width * multiplier 
-    rects = ax3.bar(np.arange(3) + offset, v2['STR'], width, label=['STR']*3, color='white', hatch=hatchstr, edgecolor = edgecolor)
+    rects = ax3.bar(np.arange(3) + offset, v2['STR'], width, label=['STR']*3, color=barcolors[1], hatch=hatchstr, edgecolor = edgecolor)
     ax3.bar_label(rects, padding=3)
     multiplier += 1   
 

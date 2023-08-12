@@ -13,7 +13,7 @@ from multiprocessing import Pool,freeze_support
 from class_model_types import Jurymodel
 
 outputdir = '../Simulations/'
-defaultnjuries = 50000
+defaultNjuries = 50000
 nprocs = 6
 
 def Jurypool(kwargs,show=''):
