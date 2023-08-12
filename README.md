@@ -10,7 +10,7 @@ Bibtex Citation:
     author = "Moro, Andrea and Martin {Van der Linden}",
     year = "Forthcoming",
     month = "",
-    journal = "Journal of Law and Economics",
+    journal = "The Journal of Law and Economics",
     volume = "2102.07222",
     url = "http://andreamoro.net/assets/papers/juryselection.pdf"
 }
