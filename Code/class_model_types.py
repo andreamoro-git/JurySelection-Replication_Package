@@ -4,9 +4,10 @@
 Created on Mon May 25 18:15:52 2020
 
 """
+#%%
 import numpy as np
 import sys,time
-from scipy.stats import uniform, beta
+from scipy.stats import uniform, beta, norm
 
 class Jurymodel():
 
@@ -50,28 +51,37 @@ class Jurymodel():
         self.delta = delta
         self.print_option = print_option
 
-        self.V = np.zeros((J+1,D+1,P+1))
-        self.a = np.zeros((J+1,D+1,P+1))
-        self.b = np.zeros((J+1,D+1,P+1))
+        self.V = np.zeros((J+1,D+1,P+1))*np.nan
+        self.a = np.zeros((J+1,D+1,P+1))*np.nan
+        self.b = np.zeros((J+1,D+1,P+1))*np.nan
+        self.poolSize = self.J + self.P + self.D
 
         if self.seed != 0:
             np.random.seed(self.seed)
 
+        # initialize the model if class is Jurymodel
+        if self.__class__.__name__ == 'Jurymodel':
+            self.initialize()
+
         # do some computations only once
-        self.poolSize = self.J + self.P + self.D
-        self.big_grid =  np.arange(0+self.delta,1-self.delta,self.delta)
+    def initialize(self):
+        ''' initialize the model by computing distributions and expected values
+        '''
+
+        self.big_grid =  np.arange(0+self.delta/2,1,self.delta)
         self.pmf0 = self.pmfCompute(self.fx0)
         self.pmf1 = self.pmfCompute(self.fx1)
         self.pmf2 = self.pmfCompute(self.fx2)
         self.pmf = self.R * self.pmf1 + self.R2 * self.pmf2 + (1 - self.R - self.R2) * self.pmf0
         self.mu = self.muCompute()
-
+        
         self.computeV()
+
+        return None
 
     def pmfCompute(self,fx):
 
         # Empirical distribution of x for type 0 depending on given distribution and its parameters
-
         if fx['f'] == 'uniform':
 
             dist = uniform(loc = fx['lb'], scale = fx['ub']-fx['lb'])
@@ -93,19 +103,39 @@ class Jurymodel():
             # pmf[-1] = pmf[-1] - (sum(pmf) - 1)
 
             return pmf
+    
+        if fx['f'] == 'logit-normal':
+
+            mu, sig, lb, ub = fx['mu'], fx['sig'], fx['lb'], fx['ub']    
+            
+            #sanity check
+            if sig<=0:
+                sys.exit('logitnormal with negative std',fx)
+            
+            dist = norm(mu, sig)
+            mask = (self.big_grid >= lb) & (self.big_grid <= ub)
+            logittrans = np.log((self.big_grid[mask]-lb)/(ub-self.big_grid[mask]))
+            pmf = self.big_grid * 0
+            pmf[mask] = dist.pdf(logittrans)*(ub-lb)/((ub-self.big_grid[mask])*(self.big_grid[mask]-lb))*self.delta
+            pmf = pmf/sum(pmf)
+
+            return pmf
 
     def muCompute(self):
 
         return sum(self.pmf*self.big_grid)
 
     def integrate(self,lb,ub):
-
+        ''' computes the expected value of the distribution between lb and ub
+        '''
+        
+        # I tend to forget that the integrand here is the CDF not the PDF!!!
         pdf = np.cumsum(self.pmf)
+        rlb = np.where(self.big_grid >= lb)[0][0]
+        rub = np.where(self.big_grid <= ub)[0][-1]
+        expval = sum(pdf[rlb:rub+1]) * self.delta
 
-        rlb = int(round(lb*(1/self.delta)))
-        rub = int(round(ub*(1/self.delta)))
-
-        return sum(pdf[rlb:rub]) * self.delta
+        return expval
 
     def computeV(self):
         ''' recursively compute subgames value
@@ -116,9 +146,9 @@ class Jurymodel():
         P = self.P
 
         # initialize matrices
-        V = np.empty((J+1, D+1, P+1))
-        a = np.empty((J+1, D+1, P+1))
-        b = np.empty((J+1, D+1, P+1))
+        V = np.empty((J+1, D+1, P+1))*np.nan
+        a = np.empty((J+1, D+1, P+1))*np.nan
+        b = np.empty((J+1, D+1, P+1))*np.nan
 
         for d in range(0, D+1):
             for p in range(0, P+1):
@@ -161,21 +191,13 @@ class Jurymodel():
         '''
             draw jury pool from distribution
         '''
-
+        
         # draw type
         jtype = np.random.choice(3, self.poolSize, p=[1-self.R-self.R2, self.R, self.R2])
 
         # draw conviction probability
         x = np.array([])
-
-        # for i in jtype:
-        #     if i == 0:
-        #         x = np.append(x, np.random.choice(self.big_grid, 1, p=self.pmf0))
-        #     elif i == 1:
-        #         x = np.append(x, np.random.choice(self.big_grid, 1, p=self.pmf1))
-        #     elif i == 2:
-        #         x = np.append(x, np.random.choice(self.big_grid, 1, p=self.pmf2))
-
+        
         # using internal beta function
         x = np.zeros(len(jtype))
         if sum(jtype==0)>0:
@@ -183,24 +205,33 @@ class Jurymodel():
                 x[jtype==0] = np.random.beta(self.fx0['al'],self.fx0['bet'],sum(jtype==0))
             if self.fx0['f'] == 'uniform':
                 x[jtype==0] = np.random.uniform(self.fx0['lb'],self.fx0['ub'],sum(jtype==0))
+            if self.fx0['f'] == 'logit-normal':
+                draw = np.random.normal(self.fx0['mu'],self.fx0['sig'],sum(jtype==0))
+                x[jtype==0] = self.fx0['lb'] + (self.fx0['ub']-self.fx0['lb'])*np.exp(draw)/(1+np.exp(draw))           
         if sum(jtype==1)>0:
             if self.fx1['f'] == 'beta':
                 x[jtype==1] = np.random.beta(self.fx1['al'],self.fx1['bet'],sum(jtype==1))
             if self.fx1['f'] == 'uniform':
                 x[jtype==1] = np.random.uniform(self.fx1['lb'],self.fx1['ub'],sum(jtype==1))
+            if self.fx1['f'] == 'logit-normal':
+                draw = np.random.normal(self.fx1['mu'],self.fx1['sig'],sum(jtype==1))
+                x[jtype==1] = self.fx1['lb'] + (self.fx1['ub']-self.fx1['lb'])*np.exp(draw)/(1+np.exp(draw))
         if sum(jtype==2)>0:
             if self.fx2['f'] == 'beta':
                 x[jtype==2] = np.random.beta(self.fx2['al'],self.fx2['bet'],sum(jtype==2))
             if self.fx2['f'] == 'uniform':
                 x[jtype==2] = np.random.uniform(self.fx2['lb'],self.fx2['ub'],sum(jtype==2))
-
+            if self.fx2['f'] == 'logit-normal':
+                draw = np.random.normal(self.fx2['mu'],self.fx2['sig'],sum(jtype==2))
+                x[jtype==2] = self.fx2['lb'] + (self.fx2['ub']-self.fx2['lb'])*np.exp(draw)/(1+np.exp(draw))
+         
         return x, jtype
 
     def simulateSTRjury(self,draw={}):
-
+ 
         if draw is self.simulateSTRjury.__defaults__[0]:
             draw = self.fxdraw()
-
+            
         x_vec = draw[0]
         t_vec = draw[1]
 
@@ -216,17 +247,17 @@ class Jurymodel():
         chDt =  t_vec[chDID]
         chP = x_vec[chPID]
         chPt =  t_vec[chPID]
-
+        
         return jury,juryt,chD,chDt,chP,chPt
 
     def simulateSARjury(self,draw={}):
-
+ 
         if draw is self.simulateSARjury.__defaults__[0]:
             draw = self.fxdraw()
-
+            
         x_vec = draw[0]
         t_vec = draw[1]
-
+        
         # array of accepted jurors, challgenged from d, and challenged from p
         jury = np.empty(self.J)
         juryt = np.empty(self.J,dtype=int)
@@ -276,10 +307,9 @@ class Jurymodel():
             juryt[j-1] = t
             j = j-1
             counter = counter + 1
-
+        
         return jury,juryt,chD,chDt,chP,chPt
-
-
+     
     def simulateRANjury(self,draw={}):
 
         if draw is self.simulateSTRjury.__defaults__[0]:
@@ -333,7 +363,6 @@ class Jurymodel():
         numJury = sum(jurytRAN)
         numChRAN = np.array([numTypesPool[0]-self.J+numJury,numTypesPool[1]-numJury])
 
-#        return jurySAR, jurytSAR, chDSAR, chDtSAR, chPSAR, chPtSAR, jurySTR, jurytSTR, chDSTR, chDtSTR, chPSTR, chPtSTR
         return {'jurySAR': jurySAR, 'jurytSAR': jurytSAR,
                 'jurySTR': jurySTR, 'jurytSTR': jurytSTR,
                 'juryRAN': juryRAN, 'jurytRAN': jurytRAN,
@@ -357,7 +386,7 @@ class Jurymodel():
 
         for jury in range(N):
             if self.print_option>=1:
-                if jury % 2500 == 0:
+                if jury % 5000 == 0:
                     print(jury)
             juries = self.simulateJury()
             juriestSAR[jury,:] = juries['jurytSAR']
@@ -442,18 +471,10 @@ def Jurypool10(kwargs):
 
 
 #%% test code
-
 if __name__ == '__main__':
 
-#     model1 = SRmodel(12,1,1) #uniform (default in class)
-#     model2 = SRmodel(12,2,2)
-
-#     model10 = SRmodel(12,10,10)
-#     model10.printBDtab1()
-
-#     model = SRmodel(12,6,6)
-    a0, b0 = [1.4,0.33]
-    a1, b1 = [12.15,.16]
+    a0, b0 = [1,5]
+    a1, b1 = [5,1]
     R = .6594705
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
             'R' : R,
@@ -466,19 +487,14 @@ if __name__ == '__main__':
             'seed' : 2443,
             }
     timenow = time.time()
-
     model = Jurymodel(**baseargs)
 
     j1 = model.fxdraw()
     s1 = model.simulateSTRjury(draw=j1)
 
     resultbeta = model.manyJuries(2501)
- #   print(model.computeMoments(resultbeta['juriestSTR'],resultbeta['numChDSTR'],resultbeta['numChPSTR']))
-
- #   print(np.average(np.sum(1-resultbeta['juriestSAR'],axis=1)))
- #   print(np.average(resultbeta['numChDSTR']))
- #   print(np.average(resultbeta['juriesxSAR']))
- #   print(np.average(resultbeta['juriesxSTR']))
     print(np.average(resultbeta['juriesxRAN']))
     print(np.average(resultbeta['juriestRAN']))
-#    print('time: ',time.time()-timenow)
+    print('time: ',time.time()-timenow)
+
+# %%

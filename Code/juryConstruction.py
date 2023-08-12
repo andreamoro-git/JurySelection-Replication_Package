@@ -6,7 +6,6 @@
 #
 # (note: let's try to keep only those actually used in the paper)
 #
-#
 import gzip,pickle
 from copy import deepcopy
 import numpy as np
@@ -14,9 +13,11 @@ from multiprocessing import Pool,freeze_support
 from class_model_types import Jurymodel
 
 outputdir = '../Simulations/'
+defaultnjuries = 50000
+nprocs = 6
 
 def Jurypool(kwargs,show=''):
-    njuries = 50000
+    njuries = defaultNjuries
     print('**', kwargs['R'], '**')
     mod = Jurymodel(**kwargs)
     jur = mod.manyJuries(njuries)
@@ -24,7 +25,7 @@ def Jurypool(kwargs,show=''):
     return jur
 
 def JurypoolD(kwargs):
-    njuries = 50000
+    njuries = defaultNjuries
     print('**', kwargs['D'], '**')
     mod = Jurymodel(**kwargs)
     jur = mod.manyJuries(njuries)
@@ -39,9 +40,10 @@ def JurypoolD(kwargs):
 if __name__ == '__main__':
     freeze_support()
 
-#%% Beta, extreme polarization (for fig:atleast1-3beta)
+#%% 
+# Beta, extreme polarization (for fig:atleast1-3beta)
 
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.75,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -60,9 +62,10 @@ if __name__ == '__main__':
     fname.close()
 
 
-#%% Beta, moderate polarization (for fig:atleast1-3beta)
+#%% 
+# Beta, moderate polarization (for fig:atleast1-3beta)
 
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.75,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -82,7 +85,7 @@ if __name__ == '__main__':
     
     #%% Beta, mild polarization (for fig:atleast1-3beta)
     
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.75,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},
@@ -102,7 +105,7 @@ if __name__ == '__main__':
 
 #%% Uniform, 1j, polarized (For fig:prop2-uni, Prop. 2)
 
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 1,'D' : 1, 'P' : 1,
                 'R' : 0.25,
                 'fx0' : {'f': 'uniform', 'lb' : 0, 'ub': 0.1},
@@ -140,8 +143,6 @@ if __name__ == '__main__':
             newkw['fx0'] = {'f': 'uniform', 'lb' : 0, 'ub': gsize}
             newkw['fx1'] = {'f': 'uniform', 'lb' : gsize, 'ub': 1}
             iterlist.append((newkw))
-    
-    nprocs = 6
 
     pool = Pool(processes=nprocs)
     allmajSizes = pool.map(Jurypool,(iterlist))
@@ -158,7 +159,7 @@ if __name__ == '__main__':
 #%% Representation of minority jurors ( for tab:betas-grouprep - Table 1)
 
     # Extreme, 1-r = .5
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -177,7 +178,7 @@ if __name__ == '__main__':
     fname.close()
     
     # Extreme, 1-r = .90
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.90,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -196,7 +197,7 @@ if __name__ == '__main__':
     fname.close()
     
     # Moderate, 1-r = .5
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -214,7 +215,7 @@ if __name__ == '__main__':
     fname.close()
     
     # Moderate, 1-r = 0.9
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.90,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -232,7 +233,7 @@ if __name__ == '__main__':
     fname.close()
     
     # Mild, 1-4 = -.75
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},
@@ -251,7 +252,7 @@ if __name__ == '__main__':
     fname.close()
     
     # Mild, 1-r= .90
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.90,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},
@@ -290,9 +291,7 @@ if __name__ == '__main__':
             newkw['D'] = nchg
             newkw['P'] = nchg
             iterlist.append((newkw))
-    
-    nprocs = 12
-    
+        
     if __name__ == '__main__':
         freeze_support()
         pool = Pool(processes=nprocs)
@@ -312,7 +311,7 @@ if __name__ == '__main__':
 # TABLE 2, Slightly Asymmetric distributions
 
 # Beta 1-5, 5-2, T1 = 50%
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -332,7 +331,7 @@ if __name__ == '__main__':
 
 #%% TABLE 2, Slightly Asymmetric distributions
 # Beta 2-4, 4-3, T1 = 50%
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -353,7 +352,7 @@ if __name__ == '__main__':
 #%% TABLE 2, Slightly Asymmetric distributions
 # Beta 2-4, 4-3, T1 = 50%
 
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -373,7 +372,7 @@ if __name__ == '__main__':
 
 #%% TABLE 2, Slightly Asymmetric distributions
 # Beta 3-4, 4-4, T1 = 50%
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},
@@ -392,9 +391,8 @@ if __name__ == '__main__':
     fname.close()
 
 #%% TABLE 2, Slightly Asymmetric groups (extreme)
-
 # Beta 1-5, 5-1, T1 = 55%
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.55,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -415,7 +413,7 @@ if __name__ == '__main__':
 #%% TABLE 2, Slightly Asymmetric groups (moderate)
     # Beta 2-4, 4-2, T1 = 55%
     
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.55,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -436,7 +434,7 @@ if __name__ == '__main__':
 #%% TABLE 2, Slightly Asymmetric groups (mild)
 # Beta 3-4, 4-3, T1 = 55%
 
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.55,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},
@@ -456,7 +454,7 @@ if __name__ == '__main__':
 
 #%% Appendix, uniform (for fig:prop1-uni)
 
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.5,
                 'fx0' : {'f': 'uniform', 'lb' : 0, 'ub': 1},
@@ -482,7 +480,7 @@ if __name__ == '__main__':
 #averaging T1 jurors
 
 #extreme T1=.1
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.1,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -501,7 +499,7 @@ if __name__ == '__main__':
     fname.close()
 
 #extreme, T1=.25
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.25,
                 'fx0' : {'f': 'beta', 'al' : 1, 'bet': 5},
@@ -520,7 +518,7 @@ if __name__ == '__main__':
     fname.close()
     
     #moderate, T1=.1
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.10,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -538,7 +536,7 @@ if __name__ == '__main__':
     fname.close()
     
     #moderate, T1=.25
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.25,
                 'fx0' : {'f': 'beta', 'al' : 2, 'bet': 4},
@@ -556,7 +554,7 @@ if __name__ == '__main__':
     fname.close()
     
     #mild, T1=.1
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.1,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},
@@ -575,7 +573,7 @@ if __name__ == '__main__':
     fname.close()
     
     #mild, T1=.25
-    njuries = 50000
+    njuries = defaultNjuries
     baseargs = {'J' : 12,'D' : 6, 'P' : 6,
                 'R' : 0.25,
                 'fx0' : {'f': 'beta', 'al' : 3, 'bet': 4},

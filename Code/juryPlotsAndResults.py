@@ -4,43 +4,72 @@
 # In this file we draw figures and compute stats. Juries are generated in
 # file juryConstruction.py
 #
-# (note: let's try to keep only those actually used in the paper)
-
 #%% Module import (run before running any cell)
 
 import gzip,pickle,shutil
 import matplotlib.pyplot as plt
 import numpy as np
-
-# erase if this generates errors
 import matplotlib
 import labellines
 
+# set some default colors and sizes
 STRcolor = 'Olive'
 SARcolor = 'DarkOrange'
 RANcolor = 'SaddleBrown'
+altcolor = 'Sienna'
+edgecolor = 'White'
+alt2color = 'GoldenRod'
+barcolors = [SARcolor, STRcolor]
+barcolor2 = [SARcolor, STRcolor]
+
+publishedFigures = False
+
+if publishedFigures == True:
+
+    # JLaw&Econ requirement
+    STRcolor = SARcolor = RANcolor = edgecolor = alt2color = 'Black'
+    barcolors = barcolor2 = ['White']*2
+    altcolor =  'White'
+
+figsize = 4.5
+figsize_single = 3.5
+labelfont = 9
+xylabelfont = 11
 
 imagedir = '../Exhibits/'
 outputdir = '../Simulations/'
 
-# checks if your system does not have or cannot read a LaTeX distribution.
+#to make sure LaTeX is found
+import os
+os.environ['PATH'] += '/Library/TeX/texbin'
+
+# checks if your system does not have or cannot read a LaTeX distribution
+# and define labels accordingly
 if shutil.which('latex'):
+    import matplotlib
     matplotlib.rcParams.update({
         "text.usetex": True,
         "font.family": "serif",
         "font.serif": ["Computer Modern Roman"]})
-    underline_c_label = '$\\underline{c}$'
-    rep_label = '\\textit{REP}'
-    ran_label = '\\textit{RAN}'
-    str_label = '\\textit{STR}'
+    underline_c_label = r'\underline{c}'
+    rep_label = r'\textit{REP}'
+    ran_label = r'\textit{RAN}'
+    str_label = r'\textit{STR}'
+    r10 = r'\parbox{5em}{\textit{REP}, \newline $r=.10$}'
+    r25 = r'\textit{REP}, $r=.25$'
+    r50 = r'\textit{REP}, $r=.50$'
+    r75 = r'\textit{REP}, $r=.75$'
+    r90 = r'\textit{REP}, $r=.90$'
 else:
     underline_c_label = '_c_'
     rep_label = 'REP'
     ran_label = 'RAN'
     str_label = 'STR'
-
-# import os
-# os.environ['PATH'] += '/Library/TeX/texbin'
+    r10 = 'REP, \n r=.10'
+    r25 = 'REP, r=.25'
+    r50 = 'REP, r=.50'
+    r75 = 'REP, r=.75'
+    r90 = 'REP, r=.90'
 
 table_pre = '\n\\begin{tabular}{lccccccc}'
 table_pre+= 	'\n	 Polarization &\\multicolumn{2}{c}{Extreme}'
@@ -51,6 +80,11 @@ table_pre+= 	'\n 	 Procedure    & \\SAR & \\STR  & \\SAR & \\STR  & \\SAR & \\ST
 table_pre+= 	'\n 	 \\hline\n'
 table_post = '\n\\end{tabular}\n'
 
+# needed for debugging since I run this script from different folders
+import os
+if os.getcwd()[-7:] == 'Package':
+    os.chdir(os.getcwd() + '/Code')
+
 #%% Plot beta densities (fig:betaPDFs)
 
 from math import gamma
@@ -58,246 +92,163 @@ from math import gamma
 x = np.linspace(0,1,100)
 alpha = 1
 beta = 5
-ya = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
+ya_x = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 
 alpha = 5
 beta = 1
-yb = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
-
-#yb = np.multiply(x**(alpha-1),(1-x)**(beta-1)) /( (alpha+beta)/(alpha*beta)/nCr(alpha+beta,alpha) )
-
-fig,ax = plt.subplots(figsize=(2.2,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.set_xlim(-0.01,1.01)
-ax.set_xlabel('Conviction probability')
-
-plt.plot(x,ya,color=STRcolor,label='$f_a(c)$: $Beta(1,5)$')
-plt.plot(x,yb,'--',color=SARcolor,label='$f_b(c)$: $Beta(5,1)$')
-ax.legend(loc='center')
-fig.tight_layout()
-
-plt.savefig(imagedir+'beta_1-5_dist.pdf')
+yb_x = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 
 alpha = 2
 beta = 4
-ya = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
+ya_d = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 alpha = 4
 beta = 2
-yb = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
-
-fig,ax = plt.subplots(figsize=(2.2,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.set_xlim(-0.01,1.01)
-ax.set_xlabel('Conviction probability')
-
-plt.plot(x,ya,color=STRcolor,label='$f_a(c)$: $Beta(2,4)$')
-plt.plot(x,yb,'--',color=SARcolor,label='$f_b(c)$: $Beta(4,2)$')
-ax.legend(loc='center')
-fig.tight_layout()
-
-plt.savefig(imagedir+'beta_2-4_dist.pdf')
+yb_d = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 
 alpha = 3
 beta = 4
-ya = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
+ya_m = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 alpha = 4
 beta = 3
-yb = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
+yb_m = np.multiply(x**(alpha-1),(1-x)**(beta-1)) * gamma(alpha+beta)/(gamma(alpha)*gamma(beta))
 
-fig,ax = plt.subplots(figsize=(2.2,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.set_xlim(-0.01,1.01)
-ax.set_xlabel('Conviction probability $c$')
+fig,(axx,axd,axm) = plt.subplots(1, 3, figsize=(figsize,figsize*1/2+.2), constrained_layout=True)
 
-plt.plot(x,ya,color=STRcolor,label='$f_a(c)$: $Beta(3,4)$')
-plt.plot(x,yb,'--',color=SARcolor,label='$f_b(c)$: $Beta(4,3)$')
-# from labellines import labelLines
-# plt.gca().get_lines()
-# labelLines(plt.gca().get_lines(), align=False, xvals= [0.25,0.82], fontsize=11)
+for ax in [axx,axd,axm]: 
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.set_xlim(-0.01,1.01)
+    
+axd.set_xlabel('Conviction probability')
 
-ax.legend(loc='center')
+axx.plot(x,ya_x,color=STRcolor,label='$f_a$')
+axx.plot(x,yb_x,'--',color=SARcolor,label='$f_b$')
+axx.set_title('(a) Extreme \n\n $f_a(c): Beta(1,5)$ \n $f_b(c): Beta(5,1)$', fontsize=xylabelfont)
+labellines.labelLines(axx.get_lines(), align=False, fontsize=xylabelfont, xvals=[.18,.82],bbox={'alpha': 0}, )
+
+axd.plot(x,ya_d,color=STRcolor,label='$f_a$')
+axd.plot(x,yb_d,'--',color=SARcolor,label='$f_b$')
+axd.set_title('(b) Moderate \n\n $f_a(c): Beta(2,4)$ \n $f_b(c): Beta(4,2)$', fontsize=xylabelfont)
+labellines.labelLines(axd.get_lines(), align=False, fontsize=xylabelfont, xvals=[.14,.86],bbox={'alpha': 0}, )
+
+axm.plot(x,ya_m,color=STRcolor,label='$f_a$')
+axm.plot(x,yb_m,'--',color=SARcolor,label='$f_b$')
+axm.set_title('(c) Mild \n\n $f_a(c): Beta(3,4)$ \n $f_b(c): Beta(4,3)$', fontsize=xylabelfont)
+labellines.labelLines(axm.get_lines(), align=False, fontsize=xylabelfont, xvals=[.2,.8],bbox={'alpha': 0}, )
+
 fig.tight_layout()
-
-plt.savefig(imagedir+'beta_3-4_dist.pdf')
-
+plt.savefig(imagedir+'betaPDFs.pdf')
 
 #%% fig:atleast1-3betas (for proposition 1)
 
+def new_func(datafile):
+    fname = gzip.open(outputdir+datafile,'rb')
+    resultuni = pickle.load(fname)
+    baseargs = resultuni['baseargs']
+    njuries = len(resultuni['juriestSAR'][:,0])
+    fname.close()
+
+    xSAR = resultuni['juriesxSAR']
+    xSTR = resultuni['juriesxSTR']
+    xRAN = resultuni['juriesxRAN']
+
+    nLess_c_SAR = np.array([])
+    nLess_c_STR = np.array([])
+    nLess_c_RAN = np.array([])
+    nMore_c_SAR = np.array([])
+    nMore_c_STR = np.array([])
+    nMore_c_RAN = np.array([])
+
+    xx = np.arange(0, 1.01, 0.01)
+    for c in xx:
+        nLess_c_SAR = np.append(nLess_c_SAR, np.sum(np.count_nonzero(xSAR<c, axis=1) >=1 ) /njuries)
+        nLess_c_STR = np.append(nLess_c_STR, np.sum(np.count_nonzero(xSTR<c, axis=1) >=1 ) /njuries)
+        nLess_c_RAN = np.append(nLess_c_RAN, np.sum(np.count_nonzero(xRAN<c, axis=1) >=1 ) /njuries)
+        nMore_c_SAR = np.append(nMore_c_SAR, np.sum(np.count_nonzero(xSAR>c, axis=1) >=1 ) /njuries)
+        nMore_c_STR = np.append(nMore_c_STR, np.sum(np.count_nonzero(xSTR>c, axis=1) >=1 ) /njuries)
+        nMore_c_RAN = np.append(nMore_c_RAN, np.sum(np.count_nonzero(xRAN>c, axis=1) >=1 ) /njuries)
+    return xRAN,nLess_c_SAR,nLess_c_STR,nLess_c_RAN,xx
+
 ## extreme polarization
-fname = gzip.open(outputdir+'beta-1-5-12j-75pcT1.pickle.gz','rb')
-resultuni = pickle.load(fname)
-baseargs = resultuni['baseargs']
-njuries = len(resultuni['juriestSAR'][:,0])
-fname.close()
+xRAN_x, nLess_c_SAR_x, nLess_c_STR_x, nLess_c_RAN_x, xx = new_func('beta-1-5-12j-75pcT1.pickle.gz')
+xRAN_d, nLess_c_SAR_d, nLess_c_STR_d, nLess_c_RAN_d, xx = new_func('beta-2-4-12j-75pcT1.pickle.gz')
+xRAN_m, nLess_c_SAR_m, nLess_c_STR_m, nLess_c_RAN_m, xx = new_func('beta-3-4-12j-75pcT1.pickle.gz')
 
-xSAR = resultuni['juriesxSAR']
-xSTR = resultuni['juriesxSTR']
-xRAN = resultuni['juriesxRAN']
-nLess_c_SAR = np.array([])
-nLess_c_STR = np.array([])
-nLess_c_RAN = np.array([])
-nMore_c_SAR = np.array([])
-nMore_c_STR = np.array([])
-nMore_c_RAN = np.array([])
+fig,(axx,axd,axm) = plt.subplots(1,3,figsize=(figsize,figsize*7/12), sharey=True)
+for ax in [axx,axd,axm]:
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
 
+    ax.set_xlim((0,.45))
+    ax.set_xlabel('Threshold '+underline_c_label,fontsize=xylabelfont)
+    ax.set_xticks([0,0.2,0.4])
 
-xx = np.arange(0, 1.01, 0.01)
-for c in xx:
-    nLess_c_SAR = np.append(nLess_c_SAR, np.sum(np.count_nonzero(xSAR<c, axis=1) >=1 ) /njuries)
-    nLess_c_STR = np.append(nLess_c_STR, np.sum(np.count_nonzero(xSTR<c, axis=1) >=1 ) /njuries)
-    nLess_c_RAN = np.append(nLess_c_RAN, np.sum(np.count_nonzero(xRAN<c, axis=1) >=1 ) /njuries)
-    nMore_c_SAR = np.append(nMore_c_SAR, np.sum(np.count_nonzero(xSAR>c, axis=1) >=1 ) /njuries)
-    nMore_c_STR = np.append(nMore_c_STR, np.sum(np.count_nonzero(xSTR>c, axis=1) >=1 ) /njuries)
-    nMore_c_RAN = np.append(nMore_c_RAN, np.sum(np.count_nonzero(xRAN>c, axis=1) >=1 ) /njuries)
+axx.set_ylabel('Fraction of juries',fontsize=xylabelfont)
 
-fig,(ax) = plt.subplots(1,1,figsize=(2.2,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
+axx.plot(xx, nLess_c_RAN_x, ':', color=RANcolor, linewidth=2, label=ran_label)
+axx.plot(xx, nLess_c_SAR_x, '', color=SARcolor, label=rep_label)
+axx.plot(xx, nLess_c_STR_x, '--', color=STRcolor, label=str_label)
+axd.plot(xx, nLess_c_RAN_d, ':', color=RANcolor, linewidth=2, label=ran_label)
+axd.plot(xx, nLess_c_SAR_d, '', color=SARcolor, label=rep_label)
+axd.plot(xx, nLess_c_STR_d, '--', color=STRcolor, label=str_label)
+axm.plot(xx, nLess_c_RAN_m, ':', color=RANcolor, linewidth=2, label=ran_label)
+axm.plot(xx, nLess_c_SAR_m, '', color=SARcolor, label=rep_label)
+axm.plot(xx, nLess_c_STR_m, '--', color=STRcolor, label=str_label)
 
-ax.set_xlim((0,.45))
-ax.set_xlabel('Threshold '+underline_c_label)
-ax.set_ylabel('Fraction of juries')
-
-ax.plot(xx, nLess_c_RAN, ':', color=RANcolor, linewidth=2, label=ran_label)
-ax.plot(xx, nLess_c_SAR, '', color=SARcolor, label=rep_label)
-ax.plot(xx, nLess_c_STR, '--', color=STRcolor, label=str_label)
 #ax.legend(loc="lower right")
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
-                      xvals = [.1,.25,.4],
-                      yoffsets=[.18,.07, -.1],
+labellines.labelLines(axx.get_lines(), align=False, fontsize=labelfont,
+                      xvals = [.1,.25,.35],
+                      yoffsets=[.18,.07, -.15],
                       bbox={'alpha': 0},
                             )
+labellines.labelLines(axd.get_lines(), align=False, fontsize=labelfont,
+                      xvals = [.15,.24,.37],
+                      yoffsets=[.29,0, -.18],
+                      bbox={'alpha': 0},
+                            )
+labellines.labelLines(axm.get_lines(), align=False, fontsize=labelfont,
+                      xvals = [.22,.25,.37],
+                      yoffsets=[.37,0, -.1],
+                      bbox={'alpha': 0},
+                            )
+
+axx.set_title('(a) Extreme', fontsize=xylabelfont)
+axd.set_title('(b) Moderate', fontsize=xylabelfont)
+axm.set_title('(c) Mild', fontsize=xylabelfont)
 fig.tight_layout()
+plt.savefig(imagedir+'prop1-beta-all.pdf')
 
-plt.savefig(imagedir+'prop1-beta-1-5-75pcT1-ul.pdf')
 
+#%%
 # Numbers in text
 textstring = ''
-textstring += 'Extreme, 10th pctile='+str(np.percentile(xRAN,10))
+
+# extreme polarization
+textstring += 'Extreme, 10th pctile='+str(np.percentile(xRAN_x,10))
 textstring += '\n verify: '+str(xx[10:11])
-textstring += '\n STR' +str(nLess_c_STR[10:11])
-textstring += '\n SAR' +str(nLess_c_SAR[10:11])
-textstring += '\n RAN' +str(nLess_c_RAN[10:11])
-#%%
-## moderate polarization
-fname = gzip.open(outputdir+'beta-2-4-12j-75pcT1.pickle.gz','rb')
-resultuni = pickle.load(fname)
-baseargs = resultuni['baseargs']
-njuries = len(resultuni['juriestSAR'][:,0])
-fname.close()
+textstring += '\n STR' +str(nLess_c_STR_x[10:11])
+textstring += '\n SAR' +str(nLess_c_SAR_x[10:11])
+textstring += '\n RAN' +str(nLess_c_RAN_x[10:11])
 
-xSAR = resultuni['juriesxSAR']
-xSTR = resultuni['juriesxSTR']
-xRAN = resultuni['juriesxRAN']
-nLess_c_SAR = np.array([])
-nLess_c_STR = np.array([])
-nLess_c_RAN = np.array([])
-nMore_c_SAR = np.array([])
-nMore_c_STR = np.array([])
-nMore_c_RAN = np.array([])
-
-xx = np.arange(0, 1.01, 0.01)
-for c in xx:
-    nLess_c_SAR = np.append(nLess_c_SAR, np.sum(np.count_nonzero(xSAR<c, axis=1) >=1 ) /njuries)
-    nLess_c_STR = np.append(nLess_c_STR, np.sum(np.count_nonzero(xSTR<c, axis=1) >=1 ) /njuries)
-    nLess_c_RAN = np.append(nLess_c_RAN, np.sum(np.count_nonzero(xRAN<c, axis=1) >=1 ) /njuries)
-    nMore_c_SAR = np.append(nMore_c_SAR, np.sum(np.count_nonzero(xSAR>c, axis=1) >=1 ) /njuries)
-    nMore_c_STR = np.append(nMore_c_STR, np.sum(np.count_nonzero(xSTR>c, axis=1) >=1 ) /njuries)
-    nMore_c_RAN = np.append(nMore_c_RAN, np.sum(np.count_nonzero(xRAN>c, axis=1) >=1 ) /njuries)
-
-fig,(ax) = plt.subplots(1,1,figsize=(2.2,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-
-ax.set_xlim((0,.45))
-ax.set_xlabel('Threshold '+underline_c_label)
-ax.set_ylabel('Fraction of juries')
-
-ax.plot(xx, nLess_c_RAN, ':', color=RANcolor, linewidth=2, label=ran_label)
-ax.plot(xx, nLess_c_SAR, '', color=SARcolor, label=rep_label)
-ax.plot(xx, nLess_c_STR, '--', color=STRcolor, label=str_label)
-#ax.legend(loc="lower right")
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
-                      xvals = [.09,.24,.4],
-                      yoffsets=[.26,.12, -.22],
-                      bbox={'alpha': 0},
-                            )
-fig.tight_layout()
-
-plt.savefig(imagedir+'prop1-beta-2-4-75pcT1-ul.pdf')
-
-# Numbers in text
-textstring += '\n\nModerate, 10th pctile' + str(np.percentile(xRAN,10))
+# moderate polarization
+textstring += '\n\nModerate, 10th pctile' + str(np.percentile(xRAN_d,10))
 textstring += '\nverify: '+str(xx[24:25])
-textstring += '\n STR ' +str(nLess_c_STR[24:25])
-textstring += '\n SAR ' +str(nLess_c_SAR[24:25])
-textstring += '\n RAN ' +str(nLess_c_RAN[24:25])
+textstring += '\n STR ' +str(nLess_c_STR_d[24:25])
+textstring += '\n SAR ' +str(nLess_c_SAR_d[24:25])
+textstring += '\n RAN ' +str(nLess_c_RAN_d[24:25])
 
-#%% mild polarization
-fname = gzip.open(outputdir+'beta-3-4-12j-75pcT1.pickle.gz','rb')
-resultuni = pickle.load(fname)
-baseargs = resultuni['baseargs']
-njuries = len(resultuni['juriestSAR'][:,0])
-fname.close()
-
-xSAR = resultuni['juriesxSAR']
-xSTR = resultuni['juriesxSTR']
-xRAN = resultuni['juriesxRAN']
-nLess_c_SAR = np.array([])
-nLess_c_STR = np.array([])
-nLess_c_RAN = np.array([])
-nMore_c_SAR = np.array([])
-nMore_c_STR = np.array([])
-nMore_c_RAN = np.array([])
-
-xx = np.arange(0, 1.01, 0.01)
-for c in xx:
-    nLess_c_SAR = np.append(nLess_c_SAR, np.sum(np.count_nonzero(xSAR<c, axis=1) >=1 ) /njuries)
-    nLess_c_STR = np.append(nLess_c_STR, np.sum(np.count_nonzero(xSTR<c, axis=1) >=1 ) /njuries)
-    nLess_c_RAN = np.append(nLess_c_RAN, np.sum(np.count_nonzero(xRAN<c, axis=1) >=1 ) /njuries)
-    nMore_c_SAR = np.append(nMore_c_SAR, np.sum(np.count_nonzero(xSAR>c, axis=1) >=1 ) /njuries)
-    nMore_c_STR = np.append(nMore_c_STR, np.sum(np.count_nonzero(xSTR>c, axis=1) >=1 ) /njuries)
-    nMore_c_RAN = np.append(nMore_c_RAN, np.sum(np.count_nonzero(xRAN>c, axis=1) >=1 ) /njuries)
-
-
-fig,(ax) = plt.subplots(1,1,figsize=(2.2,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-
-ax.set_xlim((0,.45))
-ax.set_xlabel('Threshold '+underline_c_label)
-ax.set_ylabel('Fraction of juries')
-
-ax.plot(xx, nLess_c_RAN, ':', color=RANcolor, linewidth=2, label=ran_label)
-ax.plot(xx, nLess_c_SAR, '', color=SARcolor, label=rep_label)
-ax.plot(xx, nLess_c_STR, '--', color=STRcolor, label=str_label)
-#ax.legend(loc="upper left")
-#ax2.legend(loc="center left")
-fig.tight_layout()
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
-                      xvals = [.12,.28,.4],
-                      yoffsets=[.2,.15, -.3],
-                      bbox={'alpha': 0},
-                            )
-
-plt.savefig(imagedir+'prop1-beta-3-4-75pcT1-ul.pdf')
-
-# Numbers in text
-textstring += '\n\nMild 10th pctile=' + str(np.percentile(xRAN,10))
+# mild polarization
+textstring += '\n\nMild 10th pctile=' + str(np.percentile(xRAN_m,10))
 textstring += '\nverify: '+str(xx[28:29])
-textstring += '\n STR' + str(nLess_c_STR[28:29])
-textstring += '\n SAR' + str(nLess_c_SAR[28:29])
-textstring += '\n RAN' + str(nLess_c_RAN[28:29])
+textstring += '\n STR' + str(nLess_c_STR_m[28:29])
+textstring += '\n SAR' + str(nLess_c_SAR_m[28:29])
+textstring += '\n RAN' + str(nLess_c_RAN_m[28:29])
 
 print(textstring)
 
 with open(imagedir + 'figuresintext.txt', 'w') as outputfile:
     outputfile.write(textstring)
 outputfile.close()
-
 
 #%% Proposition 2 counterexample (fig:prop2-uni)
 
@@ -327,21 +278,21 @@ for c in xx:
     nMore_c_STR = np.append(nMore_c_STR, np.sum(np.count_nonzero(xSTR>c, axis=1) >=1 ) /njuries)
     nMore_c_RAN = np.append(nMore_c_RAN, np.sum(np.count_nonzero(xRAN>c, axis=1) >=1 ) /njuries)
 
-fig,(ax) = plt.subplots(1,1,figsize=(4,3))
+fig,(ax) = plt.subplots(1,1,figsize=(figsize_single,figsize_single*3/4))
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 
 ax.set_xlim((0,0.1))
 ax.set_ylim((0,0.9))
-ax.set_xlabel('Threshold '+underline_c_label)
-ax.set_ylabel('Fraction of juries')
+ax.set_xlabel('Threshold '+underline_c_label,fontsize=xylabelfont)
+ax.set_ylabel('Fraction of juries',fontsize=xylabelfont)
 
 ax.plot(xx, nLess_c_RAN, ':', color=RANcolor, linewidth=2, label=ran_label)
 ax.plot(xx, nLess_c_SAR, '', color=SARcolor, label=rep_label)
 ax.plot(xx, nLess_c_STR, '--', color=STRcolor, label=str_label)
 #ax.legend(loc="center left")
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=12,
-                      xvals = [.09,.02,.04],
+labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=labelfont,
+                      xvals = [.09,.04,.04],
                       yoffsets=[-.08,0.09, -.08],
                       bbox={'alpha': 0},
                             )
@@ -352,10 +303,12 @@ plt.savefig(imagedir+'prop2-uni.pdf')
 
 #%% Minority representation in size-1 juries (fig:counter)
 
-fig,ax = plt.subplots(figsize=(3,3))
+fig,(ax,ax2) = plt.subplots(1,2, figsize=(figsize,figsize/2+.1))
+
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.set_xlim(-0.01,1.01)
+ax.set_ylim(-0.05,1.9)
 ax.set_xlabel('Conviction probability $c$')
 ax.set_yticks(np.arange(0,2,0.5))
 xx = np.linspace(0,1,1000)
@@ -365,24 +318,20 @@ RAN =  np.ones(len(xx))
 
 STR = 6*xx*(1-xx)
 
-ax.set_ylabel('Density')
-ax.set_xlabel('Conviction probability $c$')
+ax.set_ylabel('Density', fontsize=11)
+ax.set_xlabel('Conviction probability $c$', fontsize=xylabelfont)
 
 ax.plot(xx, RAN, ':', color=RANcolor, linewidth=2, label=ran_label)
 ax.plot(xx, SAR, '', color=SARcolor, label=rep_label)
 ax.plot(xx, STR, '--', color=STRcolor, label=str_label)
 
-#ax.legend()
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=12,
-                      xvals = [.9,.3,.2],
-                      yoffsets=[.1,-0.12,.32],
+labellines.labelLines(ax.get_lines(), align=False, fontsize=labelfont,
+                      xvals = [.91,.3,.2],
+                      yoffsets=[.1,-0.15,.4],
                       bbox={'alpha': 0},
                             )
 
-fig.tight_layout()
-plt.savefig(imagedir+'counter.pdf')
-
-#%% Minority representation in size-1 juries (fig:counter_b)
+# Minority representation in size-1 juries (fig:counter_b)
 
 fname = gzip.open(outputdir+'uni-1-1-1-MANYr.gz','rb')
 resultall = pickle.load(fname)
@@ -402,28 +351,32 @@ for model in resultall:
     avSTR = np.append(avSTR,np.average(model['juriestSTR']==0))
 
 
-fig,ax = plt.subplots(figsize=(3,3))
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.set_xlim(0,.42)
-ax.set_ylabel('Fraction of group-a in juries')
-ax.set_xlabel('Fraction of group-a in jury pool $r$')
-ax.set_yticks(np.arange(0,0.41,0.1))
-ax.set_xticks(np.arange(0,0.41,0.1))
+#fig,ax = plt.subplots(figsize=(2.5,2.5))
+ax2.spines['right'].set_visible(False)
+ax2.spines['top'].set_visible(False)
+ax2.set_xlim(0,.42)
+ax2.set_ylabel('Frac. group-a in juries', fontsize = xylabelfont)
+ax2.set_xlabel('Fraction group-a in pool', fontsize = xylabelfont)
+ax2.set_yticks(np.arange(0,0.41,0.1))
+ax2.set_xticks(np.arange(0,0.41,0.1))
 
-ax.plot(Rvector, avRAN, ':', color=RANcolor, linewidth=2, label=ran_label)
-ax.plot(Rvector, avSAR, '', color=SARcolor, label=rep_label)
-ax.plot(Rvector, avSTR, '--', color=STRcolor, label=str_label)
+ax2.plot(Rvector, avRAN, ':', color=RANcolor, linewidth=2, label=ran_label)
+ax2.plot(Rvector, avSAR, '', color=SARcolor, label=rep_label)
+ax2.plot(Rvector, avSTR, '--', color=STRcolor, label=str_label)
 
 fig.tight_layout()
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=12,
-                      xvals = [.1,.36,.2],
-                      yoffsets=[.05,-0.045, -.05],
+labellines.labelLines(ax2.get_lines(), align=False, fontsize=labelfont,
+                      xvals = [.1,.38,.2],
+                      yoffsets=[.05,-0.052, -.05],
                       bbox={'alpha': 0},
                             )
-#ax.legend()
 
-plt.savefig(imagedir+'counter_b.pdf')
+ax.set_title('(a) Selected juror $c$ distribution',fontsize=xylabelfont)
+ax2.set_title('(b) Minority representation',fontsize=xylabelfont)
+
+fig.tight_layout()
+plt.savefig(imagedir+'counterall.pdf')
+#plt.savefig(imagedir+'counter_b.pdf')
 
 #%% Representation of minority jurors (tab:betas-grouprep - Table 1)
 
@@ -576,217 +529,110 @@ outputfile.close()
 
 #%% Barplot version of table above for revision
 
-def minority_fig(savefig, values, valgr1, filename, legend=True):
-    barcolors = [SARcolor, STRcolor]
-    barcolor2 = [SARcolor, STRcolor]
-    hatch = ['..','\\\\\\']
-    hatch2 = ['xx','///']
-    
-    #fig, = plt.subplots(1,2,figsize=(6,6), sharey=True, gridspec_kw={'width_ratios': [6, 1]})
-    fig = plt.figure(figsize=(7,5))
-# remove frame
-    ax = fig.add_axes([0.,0.05,.77,.93]) # axis starts at 0.1, 0.1
-    ax2 = fig.add_axes([0.7,0.05,.1,.93])
+hatch = ['..','\\\\\\','']
+hatch2 = ['xx','///','++']
+hatchrep = ['\\\\\\']*3
+hatchstr = ['..']*3
+hatch2rep = ['///']
+hatch2str = ['xx']*3
 
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['bottom'].set_visible(False)
-    ax.spines['left'].set_visible(False)
-    ax2.spines['top'].set_visible(False)
-    ax2.spines['right'].set_visible(False)
-    ax2.spines['left'].set_visible(False)
-    ax2.spines['bottom'].set_visible(False)
-    ax2.set_yticks([])
-    ax.set_yticks([])
+def new_func(ax1, values, valgr1):
 
-    x = np.arange(len(type))  # the label locations
+    # generate percent value and round to integer
+    for mod,val in values.items():
+        values[mod]= [np.round(item*100) for item in val]
+    for mod,val in valgr1.items():
+        valgr1[mod]= [np.round(item*100) for item in val]
     width = 0.2  # the width of the bars
     multiplier = 0.5
-
-# draw average n. of minorities
     key = 0
-    for mod,value in values.items():
-        if mod=='RAN':
-            continue
-        key += 1 
-        offset = width * multiplier
-        rects = ax.bar(x + offset, value, width, label=mod, hatch=hatch[key%2], color=barcolor2[key%2])
-        ax.bar_label(rects, padding=3)
-        multiplier += 1
 
-# draw fraction juries with at least 1
-    key=0
-    for mod,value in valgr1.items():
-        if mod=='RAN':
-            continue
-        key += 1 
-        offset = width * multiplier
-        rects2 = ax.bar(x + offset, value, width, hatch=hatch2[key%2], label=mod, color=barcolors[key%2])
-        ax.bar_label(rects2, padding=3)
-        multiplier += 1
-    ax.set_xticks(x+width*2, type, fontsize=14)
-    ax.set_xlim(-width,width*17)
+    offset = width * multiplier
+    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, hatch=hatchrep+[''], color=barcolor2[key%2], edgecolor = edgecolor)
+    ax1.bar_label(rects, padding=3, fontsize=labelfont)
+    multiplier += 1
 
-# draw RAN model data
-    width = 1
-    r= ax2.bar([0.5,1.5], [values['RAN'][0],valgr1['RAN'][0]], width, hatch=['','--'],color='sienna', label=['RAN','RAN'])
-    ax2.set_xticks([width], ['(All)'], fontsize = 14)
+    key = 1
+    offset = width * multiplier
+    rects = ax1.bar(np.array([0,1,2,3+width/4])+offset, values['STR'], width, label=['STR']*4, hatch=hatchstr+['---'], color=barcolor2[key%2], edgecolor = edgecolor)
+    ax1.bar_label(rects, padding=3, fontsize=labelfont)
+    multiplier += 1
 
-    ax2.bar_label(r, padding=3)
-    ax.set_ylim(0, 100)
-    ax2.set_ylim(0,100)
+    key = 0
+    offset = width * multiplier + width/4
+    rects2 = ax1.bar(np.arange(3) + offset, valgr1['REP'], width, label=['REP']*3, hatch=hatch2rep, color=barcolor2[key%2], edgecolor = edgecolor)
+    ax1.bar_label(rects2, padding=3, fontsize=labelfont)
+    multiplier += 1
 
-    if legend:
-    #Add some text for labels, title and custom x-axis tick labels, etc.
-        handles, labels = ax.get_legend_handles_labels()
-        handr, lab2 = ax2.get_legend_handles_labels()
-        firstlegend = ax.legend(handles[0:2]+[handr[0]], labels[0:2]+lab2, loc='upper left', title='% of minorities in juries', title_fontsize=15, ncols=2, fontsize=15)
-        secondlegend = ax.legend(handles[2:4]+[handr[1]], labels[2:4]+lab2, loc='upper left', bbox_to_anchor=(0,0.76), title='% Juries with  >1 minority', ncols=2, title_fontsize=15, fontsize = 15)
-        for t in secondlegend.get_texts():
-            t.set_ha('left')
-        ax.add_artist(firstlegend)
+    key = 1
+    offset = width * multiplier + width/4
+    rects2 = ax1.bar(np.arange(3) + offset, valgr1['STR'], width, label=['STR']*3, hatch=hatch2str, color=barcolor2[key%2], edgecolor = edgecolor)
+    ax1.bar_label(rects2, padding=3, fontsize=labelfont)
 
-    ax.tick_params(length=0)
-    ax2.tick_params(length=0)
-    #fig.tight_layout(pad=-1)
-    if savefig:
-        plt.savefig(filename)
+    tixlocs = [.4, 1.4, 2.4, 3.2]
+    ax1.set_xticks(tixlocs,['Extreme', 'Moderate', 'Mild', '(All)'], fontsize = labelfont)
+    return ax1
 
+fig, (ax1,ax2) = plt.subplots(2,1,figsize=(figsize,figsize))
 
-type = ['Extreme', 'Moderate', 'Mild',]# '(All)']
-values = {'REP': [.1, .18,.23],
-          'STR': [.08, .16, .23],
-          'RAN': [.25],
-}
-valgr1 = { 'REP': [.57, .88, .96],
-          'STR': [.45, .84, .95],
-          'RAN': [.97],
-}
-for mod,val in values.items():
-    values[mod]= [item*100 for item in val]
-for mod,val in valgr1.items():
-    valgr1[mod]= [item*100 for item in val]
-
-minority_fig(True, values, valgr1, filename=imagedir+'minority-representation-25.pdf', legend=False)
-
-type = ['Extreme', 'Moderate', 'Mild',]# '(All)']
-values = {'REP': [.02, .05,.09],
-            'STR': [.0, .04, .08],
-          'RAN': [.10],
-}
-
-valgr1 = { 'REP': [.17, .47, .67],
-          'STR': [.02, .38, .64],
-          'RAN': [.72],
-}
-for mod,val in values.items():
-    values[mod]= [item*100 for item in val]
-for mod,val in valgr1.items():
-    valgr1[mod]= [item*100 for item in val]
-    
-minority_fig(True, values, valgr1, filename=imagedir+'minority-representation-10.pdf', legend=True)
-
-#%%
-def equalsize_fig(savefig, values, valgr1, filename, legend=True):
-    barcolors = [SARcolor, STRcolor]
-    
-    # fig, (ax, ax2)= plt.subplots(1,2,figsize=(6,6), sharey=True, gridspec_kw={'width_ratios': [8, 1]})
-    # plt.tight_layout()
-    fig = plt.figure(figsize=(4.5,3.8))
-    ax = fig.add_axes([0.,0.05,.64,1]) # axis starts at 0.1, 0.1
-    ax2 = fig.add_axes([0.6,0.05,.1,1])
+for ax in [ax1,ax2]:
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
-    ax2.spines['top'].set_visible(False)
-    ax2.spines['right'].set_visible(False)
-    ax2.spines['left'].set_visible(False)
-    ax2.spines['bottom'].set_visible(False)
-    ax2.set_yticks([])
     ax.set_yticks([])
-
-    x = np.arange(len(type))  # the label locations
-    width = 0.4  # the width of the bars
-    multiplier = 0.5
-
-    hatch3= ['..','\\\\','',]
-# draw average n. of minorities
-    key = 0
-    for mod,value in values.items():
-        if mod=='RAN':
-            continue
-        key += 1 
-        offset = width * multiplier
-        rects = ax.bar(x + offset, value, width, label=mod, color=barcolors[key%2], hatch=hatch3[key%2])
-        ax.bar_label(rects, padding=3)
-        multiplier += 1
-
-# # draw fraction juries with at least 1
-#     key=0
-#     for mod,value in valgr1.items():
-#         if mod=='RAN':
-#             continue
-#         key += 1 
-#         offset = width * multiplier
-#         rects2 = ax.bar(x + offset, value, width, hatch='..', label=mod, color=barcolors[key%2])
-#         ax.bar_label(rects2, padding=3)
-#         multiplier += 1
-    ax.set_xticks(x+width, type)
-    ax.set_xlim(-width,width*8)
-
-# draw RAN model data
-    width = .5
-    r= ax2.bar(0, values['RAN'][0], width,color='sienna', label=['RAN'])
-    ax2.set_xticks([0], ['(All)'])
-
-    ax2.bar_label(r, padding=3)
-    ax.set_ylim(0, 70)
-    ax2.set_ylim(0,70)
-
-    if legend:
-    #Add some text for labels, title and custom x-axis tick labels, etc.
-        handles, labels = ax.get_legend_handles_labels()
-        handr, lab2 = ax2.get_legend_handles_labels()
-        firstlegend = ax.legend(handles[0:2]+[handr[0]], labels[0:2]+lab2, loc='upper left', title='% Group-a in juries', title_fontsize=15, ncols=2, fontsize=15)
-        #secondlegend = ax.legend(handles[2:4]+[handr[1]], labels[2:4]+lab2, loc='upper left', bbox_to_anchor=(0,0.76), title='% Juries with  >1 minority', ncols=2, title_fontsize=15, fontsize = 15)
-        # for t in secondlegend.get_texts():
-        #     t.set_ha('left')
-        ax.add_artist(firstlegend)
-
     ax.tick_params(length=0)
-    ax2.tick_params(length=0)
-    if savefig:
-        plt.savefig(filename, pad_inches=.25, bbox_inches='tight')
+    ax.set_ylim(0,115)
+
+values = {'REP': [avSAR_75_b15,avSAR_75_b24,avSAR_75_b34,avRAN_75_b15 ], # [.1, .18,.23], 
+          'STR': [avSTR_75_b15,avSTR_75_b24, avSTR_75_b34, ng1RAN_75_b15], #[.08, .16, .23],
+          'RAN': [avRAN_75_b15], #[.25],
+}
+# % juries with minorities
+valgr1 = {'REP': [ng1SAR_75_b15,ng1SAR_75_b24,ng1SAR_75_b34,], #[.57, .88, .96],
+          'STR': [ng1STR_75_b15,ng1STR_75_b24,ng1STR_75_b34], #[.45, .84, .95],
+          'RAN': [ng1RAN_75_b15], #[.97],
+          }
+
+ax1=new_func(ax1, values, valgr1)
+
+values = {'REP': [avSAR_90_b15,avSAR_90_b24,avSAR_90_b34, avRAN_90_b15], # [.1, .18,.23], 
+          'STR': [avSTR_90_b15,avSTR_90_b24, avSTR_90_b34, ng1RAN_90_b15], #[.08, .16, .23],
+          'RAN': [avRAN_90_b15], #[.25],
+}
+
+valgr1 = {'REP': [ng1SAR_90_b15,ng1SAR_90_b24,ng1SAR_90_b34], # [.17, .47, .67],
+          'STR': [ng1STR_90_b15,ng1STR_90_b24,ng1STR_90_b34], #[.02, .38, .64],
+          'RAN': [ng1RAN_90_b15], #[.72],
+          }
+
+ax2=new_func(ax2, values, valgr1)
 
 
-type = ['Extreme', 'Moderate', 'Mild',]# '(All)']
+# generate percent value and round to integer
+for mod,val in values.items():
+    values[mod]= [np.round(item*100) for item in val]
+for mod,val in valgr1.items():
+    valgr1[mod]= [np.round(item*100) for item in val]
 
+#Add some text for labels, title and custom x-axis tick labels, etc.
+handles, labels = ax2.get_legend_handles_labels()
+firstlegend = ax2.legend([handles[0],handles[4],handles[3]], [rep_label,str_label,ran_label], 
+                         loc='upper left',  bbox_to_anchor=(0,1.35), title=r'\% minorities in juries', 
+                         title_fontsize=labelfont, 
+                         ncol=2, fontsize=labelfont)
+secondlegend = ax2.legend([handles[8],handles[12],handles[7]], [rep_label,str_label,ran_label], 
+                          loc='upper left', bbox_to_anchor=(0.4,1.35), title=r'\% juries with minorities', 
+                          ncol=2, title_fontsize=labelfont, fontsize = labelfont)
+for t in secondlegend.get_texts():
+    t.set_ha('left')
+ax2.add_artist(firstlegend)
 
-# table 3
-values = {'REP': [48, 49, 50],
-          'STR': [50, 50, 50],
-          'RAN': [50],}
-valsd = { 'REP': [18, 16, 15],
-            'STR': [20, 17, 15],
-            'RAN': [14],}
-values1 = {'REP': [39, 42, 45],
-          'STR': [40, 42, 44],
-          'RAN': [45],}
-valsd1 = { 'REP': [18, 16, 15],
-            'STR': [20, 17, 15],
-            'RAN': [14],}
-values2 = {'REP': [47, 49, 49],
-          'STR': [50, 48, 48],
-          'RAN': [50],}
-valsd2 = { 'REP': [18, 15, 15],
-            'STR': [20, 16, 16],
-            'RAN': [14],}
+ax1.set_title('(a) Group-a size 25\%', fontsize=xylabelfont)
+ax2.text(.2*5+.1,85,'(b) Group-a size 10\%', fontsize=xylabelfont)
 
-equalsize_fig(True  , values, valgr1=None, filename=imagedir+'balanced.pdf', legend=False)
-equalsize_fig(True, values2, valgr1=None, filename=imagedir+'balanced-c.pdf', legend=False)
-equalsize_fig(True, values1, valgr1=None, filename=imagedir+'balanced-b.pdf', legend=True)
-
+fig.tight_layout()
+plt.savefig(imagedir+'minority-representation.pdf')
 
 #%% Number of challenges, (fig:nchallenges)
 
@@ -834,38 +680,36 @@ if __name__ == '__main__':
         allextremes.append(extremes)
     allextremes = np.array(allextremes)
 
+#%%
+if __name__ == '__main__':
     # now draw the figures
-    # the following package requires pip install matplotlib-label-lines
-    import labellines
-
-    fig,ax = plt.subplots(1,1,figsize=(3,3))
+    fig,(ax,ax2) = plt.subplots(1,2,figsize=(figsize,figsize/2+.2))
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.set_xticks(np.arange(0,len(challenges)+1,2))
-    ax.set_xlabel('Number of challenges')
-    ax.set_ylabel('Fraction of juries')
-    ax.plot(challenges, nLess_c_SAR, marker='s', color=SARcolor, label=rep_label, linewidth=.6, markersize=4)
-    ax.plot(challenges, nLess_c_STR, '--', marker='*',color=STRcolor, label=str_label, linewidth=.6, markersize=4)
-    #ax.legend(loc='center right')
-    labellines.labelLines(plt.gca().get_lines(), align=False, yoffsets=[.06,.03], bbox={'alpha': 0}, fontsize=13, )# align=False)
+    ax.set_xlabel('Number of challenges', fontsize=xylabelfont)
+    ax.set_ylabel('Fraction of juries', fontsize=xylabelfont)
+    ax.plot(challenges, nLess_c_SAR, marker='s', color=SARcolor, label=rep_label, linewidth=.6, markersize=3)
+    ax.plot(challenges, nLess_c_STR, '--', marker='o',fillstyle='none', color=STRcolor, label=str_label, linewidth=.6, markersize=3)
+    labellines.labelLines(ax.get_lines(), align=False, yoffsets=[.095,.033], bbox={'alpha': 0}, fontsize=labelfont, )# align=False)
+
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    ax2.set_xticks(np.arange(0,len(challenges)+1,2))
+    ax2.set_xlabel('Number of challenges', fontsize = xylabelfont)
+    ax2.set_ylabel('Fraction of minorities', fontsize = xylabelfont)
+    ax2.plot(challenges, minSAR, marker='s', color=SARcolor, label=rep_label, linewidth=.6, markersize=3)
+    ax2.plot(challenges, minSTR, '--', marker='o',fillstyle='none', color=STRcolor, label=str_label, linewidth=.4, markersize=3)
+    labellines.labelLines(ax2.get_lines(), align=False, xvals=[7,8],yoffsets=[.015,-.012], bbox={'alpha': 0}, fontsize=labelfont, )# align=False)
+    
+    ax.set_title('(a) Juries with at least 1 extreme', fontsize=xylabelfont)
+    ax2.set_title('(b) Minority representation', fontsize=xylabelfont)
+    ax2.set_ylim(.08,.19)
+    ax2.set_yticks(np.arange(.1,.2,.02))
     fig.tight_layout()
-    plt.savefig(imagedir+'nchallenges-extreme.pdf')
+    plt.savefig(imagedir+'nchallenges-extr-minority.pdf')
 
-
-    fig,ax = plt.subplots(1,1,figsize=(3,3))
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.set_xticks(np.arange(0,len(challenges)+1,2))
-    ax.set_xlabel('Number of challenges')
-    ax.set_ylabel('Fraction of minorities')
-    ax.plot(challenges, minSAR, marker='s', color=SARcolor, label=rep_label, linewidth=.6, markersize=4)
-    ax.plot(challenges, minSTR, '--', marker='*',color=STRcolor, label=str_label, linewidth=.6, markersize=4)
-    #ax.legend(loc='center right')
-    labellines.labelLines(plt.gca().get_lines(), align=False, yoffsets=[.01,.006], bbox={'alpha': 0}, fontsize=13, )# align=False)
-    fig.tight_layout()
-    plt.savefig(imagedir+'nchallenges-minority.pdf')
-
-#%% Prob. of selecting x jurors abovbe median (fig:median)
+    #%% Prob. of selecting x jurors abobe median (fig:median)
 fname = gzip.open(outputdir+'beta-1-5-12j-50pcT1.pickle.gz','rb')
 resultbeta_50 = pickle.load(fname)
 fname.close()
@@ -930,26 +774,23 @@ ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.set_xlim(6.8,12.05)
 ax.set_ylim(-0.02,0.09)
-ax.set_xlabel('Minimum number of jurors below the median')
-ax.set_ylabel('Fraction of juries (difference with \\textit{RAN})')
+ax.set_xlabel('Min. number of jurors below the median',fontsize=xylabelfont)
+ax.set_ylabel('Fraction of juries (diff. with \\textit{RAN})',fontsize=xylabelfont)
 shift=.2
 
-# ax.bar(x-2*shift,prgmed50STR[6:13]-prgmed50RAN[6:13],width=shift,color=STRcolor,label=str_label)
-# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color=RANcolor,label='\\textit{REP}, $r=.90$')
-# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color=SARcolor,label='\\textit{REP}, $r=.75$')
-# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color=STRcolor,label=str_label,linewidth=.8)
-ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color=RANcolor,label='\\parbox{5em}{\\textit{REP},\\newline $r=.10$}',linewidth=.8, markersize=4)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color=SARcolor,label='\\textit{REP}, $r=.25$',linewidth=.8, markersize=4)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='Goldenrod',label='\\textit{REP}, $r=.5$',linewidth=.8, markersize=4)
+ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color=RANcolor,label=r10,linewidth=.8, markersize=4)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color=SARcolor,label=r25,linewidth=.8, markersize=4)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color=alt2color,label=r50,linewidth=.8, markersize=4)
 fig.tight_layout()
 #ax.legend()
-labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=11,
+labellines.labelLines(plt.gca().get_lines(), align=False, fontsize=labelfont,
                       xvals = [10.5,7.3,8.35,8.5],
-                      yoffsets=[0.012,+0.019,-0.012,-0.016],
+                      yoffsets=[0.012,+0.01,-0.012,-0.016],
                       bbox={'alpha': 0},
                             )
 plt.savefig(imagedir+'median.pdf')
+
 
 #%% Representation in balanced groups  (table tab:betas-grouprep-balanced)
 
@@ -1069,7 +910,111 @@ with open(imagedir + 'tables.tex', 'a') as outputfile:
 outputfile.close()
 
 
+#%%
+def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
+    
+    # fig, (ax, ax2)= plt.subplots(1,2,figsize=(6,6), sharey=True, gridspec_kw={'width_ratios': [8, 1]})
+    # plt.tight_layout()
+    fig,(ax1,ax2,ax3) = plt.subplots(1,3,figsize=(6,4))
+    # ax = fig.add_axes([0.,0.05,.64,1]) # axis starts at 0.1, 0.1
+    # ax2 = fig.add_axes([0.6,0.05,.1,1])
 
+    for ax in [ax1,ax2,ax3]:
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.set_ylim(0,70)
+        ax.set_yticks([])
+        ax.tick_params(length=0)
+    
+
+    width = 0.4  # the width of the bars
+
+    hatch3= ['..','\\\\','',]
+    hatchrep = ['\\\\']*3
+    hatchstr = ['..']*3
+
+# draw average n. of minorities
+    key = 0
+    multiplier = 0
+    offset = width * multiplier 
+    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, color='white', hatch=hatchrep+[''], edgecolor = edgecolor)
+    ax1.bar_label(rects, padding=3)
+    multiplier += 1    
+
+    key += 1 
+    offset = width * multiplier 
+    rects = ax1.bar(np.arange(3) + offset, values['STR'], width, label=['STR']*3, color='white', hatch=hatchstr, edgecolor = edgecolor)
+    ax1.bar_label(rects, padding=3)
+    multiplier += 1    
+
+# draw average n. of minorities
+    key = 0
+    multiplier=0
+    offset = width * multiplier 
+    rects = ax2.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color='white', hatch=hatchrep+[''], edgecolor = edgecolor)
+    ax2.bar_label(rects, padding=3)
+    multiplier += 1    
+
+    key += 1 
+    offset = width * multiplier
+    rects = ax2.bar(np.arange(3) + offset, v2['STR'], width, label=['STR']*3, color='white', hatch=hatchstr, edgecolor = edgecolor)
+    ax2.bar_label(rects, padding=3)
+    multiplier += 1    
+
+# draw average n. of minorities
+    key = 0
+    multiplier = 0
+    offset = width * multiplier
+    rects = ax3.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color='white', hatch=hatchrep+[''], edgecolor = edgecolor)
+    ax3.bar_label(rects, padding=3)
+    multiplier += 1    
+
+    key += 1 
+    offset = width * multiplier 
+    rects = ax3.bar(np.arange(3) + offset, v2['STR'], width, label=['STR']*3, color='white', hatch=hatchstr, edgecolor = edgecolor)
+    ax3.bar_label(rects, padding=3)
+    multiplier += 1   
+
+    ax1.set_title('(a) $r=0.5$', fontsize=15)
+    ax2.set_title('(b) $r=0.45$', fontsize=15)
+    ax3.set_title('(c) $r=0.5, asymm.$', fontsize=15)
+
+    ticklocks = [width/2, 1+width/2, 2+width/2, 3]
+    ax1.set_xticks(ticklocks, ['Extr.','Mod.','Mild','(All)'])
+    ax2.set_xticks(ticklocks, ['Extr.','Mod.','Mild','(All)'])
+    ax3.set_xticks(ticklocks, [r'Extr.$^*$',r'Mod.$^*$',r'Mild$^*$','(All)'])
+    ax.set_xlim(-width,width*8)
+
+
+    handles, labels = ax1.get_legend_handles_labels()
+    fig.legend([handles[0],handles[4],handles[3]],[rep_label,str_label,ran_label], loc='upper center', bbox_to_anchor=(0.5, 0.85), ncol=3, fontsize=15)
+    
+    fig.tight_layout()
+    if savefig:
+        plt.savefig(filename, pad_inches=.25, bbox_inches='tight')
+
+
+# data from table 3
+values = {'REP': [avSAR_50_b15,avSAR_50_b24,avSAR_50_b34, avRAN_50_b15 ], # [48, 49, 50],
+          'STR': [avSTR_50_b15,avSTR_50_b24, avSTR_50_b34], #[50, 50, 50],
+          'RAN': [avRAN_50_b15], #[50],
+}
+values1 = {'REP': [avSAR_50_1_5_unbal,avSAR_50_2_4_unbal,avSAR_50_3_4_unbal, avRAN_50_1_5_unbal], # [39, 42, 45],
+           'STR': [avSTR_50_1_5_unbal,avSTR_50_2_4_unbal,avSTR_50_3_4_unbal], #[40, 42, 44],
+           'RAN': [avRAN_50_1_5_unbal], #[45],
+}
+values2 = {'REP': [avSAR_50_1_5_tilt,avSAR_50_2_4_tilt,avSAR_50_3_4_tilt, avRAN_50_1_5_tilt], # [47, 49, 49],
+           'STR': [avSTR_50_1_5_tilt,avSTR_50_2_4_tilt,avSTR_50_3_4_tilt], #[50, 48, 48],
+           'RAN': [avRAN_50_1_5_tilt], #[50],
+}
+
+for vals in [values,values1,values2]:
+    for mod,val in vals.items():
+        vals[mod]= [np.round(item*100) for item in val]
+
+equalsize_fig(True, values, values1, values2, filename=imagedir+'balanced.pdf', legend=False)
 #%% Proposition 1, appendix fig:prop1-uni (uniform distribution)
 
 fname = gzip.open(outputdir+'uni-12j-6-6.pickle.gz','rb')
@@ -1301,6 +1246,7 @@ prgmed90STR = np.zeros(njurors)
 prgmed50RAN = np.zeros(njurors)
 prgmed75RAN = np.zeros(njurors)
 prgmed90RAN = np.zeros(njurors)
+
 for n in range(6,13):
     prgmed50SAR[n-1] = np.sum(nSARgmed_50>=n)/len(nSARgmed_50)
     prgmed75SAR[n-1] = np.sum(nSARgmed_75>=n)/len(nSARgmed_75)
@@ -1332,14 +1278,10 @@ ax.set_xlabel('Number of jurors')
 ax.set_ylabel('Probability (difference with \\textit{RAN})')
 shift=.2
 
-# ax.bar(x-2*shift,prgmed50STR[6:13]-prgmed50RAN[6:13],width=shift,color=STRcolor,label=str_label)
-# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color=RANcolor,label='\\textit{REP}, $r=.90$')
-# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color=SARcolor,label='\\textit{REP}, $r=.75$')
-# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color=STRcolor,label=str_label,linewidth=.8)
-ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color=RANcolor,label='\\textit{REP}, $r=.90$',linewidth=.8)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color=SARcolor,label='\\textit{REP}, $r=.75$',linewidth=.8)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='goldenrod',label='\\textit{REP}, $r=.5$',linewidth=.8)
+ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color=RANcolor,label=r90,linewidth=.8)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color=SARcolor,label=r75,linewidth=.8)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='goldenrod',label=r50,linewidth=.8)
 fig.tight_layout()
 ax.legend()
 plt.savefig(imagedir+'median-2-4.pdf')
@@ -1414,14 +1356,12 @@ ax.set_xlabel('Number of jurors')
 ax.set_ylabel('Probability (difference with \\textit{RAN})')
 shift=.2
 
-# ax.bar(x-2*shift,prgmed50STR[6:13]-prgmed50RAN[6:13],width=shift,color=STRcolor,label=str_label)
-# ax.bar(x-shift,prgmed90SAR[6:13]-prgmed90RAN[6:13],width=shift,color=RANcolor,label='\\textit{REP}, $r=.90$')
-# ax.bar(x+0*shift,prgmed75SAR[6:13]-prgmed75RAN[6:13],width=shift,color=SARcolor,label='\\textit{REP}, $r=.75$')
-# ax.bar(x+1*shift,prgmed50SAR[6:13]-prgmed50RAN[6:13],width=shift,color='Gold',label='\\textit{REP}, $r=.5$')
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color=STRcolor,label=str_label,linewidth=.8)
-ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color=RANcolor,label='\\textit{REP}, $r=.90$',linewidth=.8)
-ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color=SARcolor,label='\\textit{REP}, $r=.75$',linewidth=.8)
-ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='goldenrod',label='\\textit{REP}, $r=.5$',linewidth=.8)
+ax.plot(x,prgmed90SAR[6:13]-prgmed90RAN[6:13],marker='s',color=RANcolor,label=r90,linewidth=.8)
+ax.plot(x,prgmed75SAR[6:13]-prgmed75RAN[6:13],':',marker='o',color=SARcolor,label=r75,linewidth=.8)
+ax.plot(x,prgmed50SAR[6:13]-prgmed50RAN[6:13],'-.',marker='^',color='goldenrod',label=r50,linewidth=.8)
 fig.tight_layout()
 ax.legend()
 plt.savefig(imagedir+'median-3-4.pdf')
+
+# %%
