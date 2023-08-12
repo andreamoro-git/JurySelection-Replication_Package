@@ -548,25 +548,25 @@ def new_func(ax1, values, valgr1):
     key = 0
 
     offset = width * multiplier
-    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, hatch=hatchrep+[''], color=barcolor2[key%2], edgecolor = edgecolor)
+    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, hatch=hatchrep+[''], color=[barcolor2[0]]*3+[RANcolor], edgecolor = edgecolor)
     ax1.bar_label(rects, padding=3, fontsize=labelfont)
     multiplier += 1
 
     key = 1
     offset = width * multiplier
-    rects = ax1.bar(np.array([0,1,2,3+width/4])+offset, values['STR'], width, label=['STR']*4, hatch=hatchstr+['---'], color=barcolor2[key%2], edgecolor = edgecolor)
+    rects = ax1.bar(np.array([0,1,2,3+width/4])+offset, values['STR'], width, label=['STR']*4, hatch=hatchstr+['---'], color=[barcolor2[1]]*3+[RANcolor], edgecolor = edgecolor)
     ax1.bar_label(rects, padding=3, fontsize=labelfont)
     multiplier += 1
 
     key = 0
     offset = width * multiplier + width/4
-    rects2 = ax1.bar(np.arange(3) + offset, valgr1['REP'], width, label=['REP']*3, hatch=hatch2rep, color=barcolor2[key%2], edgecolor = edgecolor)
+    rects2 = ax1.bar(np.arange(3) + offset, valgr1['REP'], width, label=['REP']*3, hatch=hatch2rep, color=barcolor2[0], edgecolor = edgecolor)
     ax1.bar_label(rects2, padding=3, fontsize=labelfont)
     multiplier += 1
 
     key = 1
     offset = width * multiplier + width/4
-    rects2 = ax1.bar(np.arange(3) + offset, valgr1['STR'], width, label=['STR']*3, hatch=hatch2str, color=barcolor2[key%2], edgecolor = edgecolor)
+    rects2 = ax1.bar(np.arange(3) + offset, valgr1['STR'], width, label=['STR']*3, hatch=hatch2str, color=barcolor2[1], edgecolor = edgecolor)
     ax1.bar_label(rects2, padding=3, fontsize=labelfont)
 
     tixlocs = [.4, 1.4, 2.4, 3.2]
@@ -775,7 +775,8 @@ ax.spines['top'].set_visible(False)
 ax.set_xlim(6.8,12.05)
 ax.set_ylim(-0.02,0.09)
 ax.set_xlabel('Min. number of jurors below the median',fontsize=xylabelfont)
-ax.set_ylabel('Fraction of juries (diff. with \\textit{RAN})',fontsize=xylabelfont)
+ax.set_ylabel('Fraction of juries (diff. with '+ran_label+')',fontsize=xylabelfont)
+
 shift=.2
 
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color=STRcolor,label=str_label,linewidth=.8)
@@ -939,7 +940,7 @@ def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
     key = 0
     multiplier = 0
     offset = width * multiplier 
-    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, color=barcolors[0], hatch=hatchrep+[''], edgecolor = edgecolor)
+    rects = ax1.bar(np.arange(4) + offset, values['REP'], width, label=['REP']*4, color=[barcolors[0]]*3+[RANcolor], hatch=hatchrep+[''], edgecolor = edgecolor)
     ax1.bar_label(rects, padding=3)
     multiplier += 1    
 
@@ -953,7 +954,7 @@ def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
     key = 0
     multiplier=0
     offset = width * multiplier 
-    rects = ax2.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color=barcolors[0], hatch=hatchrep+[''], edgecolor = edgecolor)
+    rects = ax2.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color=[barcolors[0]]*3+[RANcolor], hatch=hatchrep+[''], edgecolor = edgecolor)
     ax2.bar_label(rects, padding=3)
     multiplier += 1    
 
@@ -967,7 +968,7 @@ def equalsize_fig(savefig, values, v2, v3, filename, legend=True):
     key = 0
     multiplier = 0
     offset = width * multiplier
-    rects = ax3.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color=barcolors[0], hatch=hatchrep+[''], edgecolor = edgecolor)
+    rects = ax3.bar(np.arange(4) + offset, v2['REP'], width, label=['REP']*4, color=[barcolors[0]]*3+[RANcolor], hatch=hatchrep+[''], edgecolor = edgecolor)
     ax3.bar_label(rects, padding=3)
     multiplier += 1    
 
@@ -1275,7 +1276,7 @@ ax.spines['top'].set_visible(False)
 ax.set_xlim(6.8,12.7)
 ax.set_ylim(-0.015,0.099)
 ax.set_xlabel('Number of jurors')
-ax.set_ylabel('Probability (difference with \\textit{RAN})')
+ax.set_ylabel('Probability (difference with '+ran_label+')')
 shift=.2
 
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color=STRcolor,label=str_label,linewidth=.8)
@@ -1353,7 +1354,7 @@ ax.spines['top'].set_visible(False)
 ax.set_xlim(6.8,12.7)
 ax.set_ylim(-0.015,0.099)
 ax.set_xlabel('Number of jurors')
-ax.set_ylabel('Probability (difference with \\textit{RAN})')
+ax.set_ylabel('Probability (difference with '+ran_label+')')
 shift=.2
 
 ax.plot(x,prgmed50STR[6:13]-prgmed50RAN[6:13],'--',marker='*',color=STRcolor,label=str_label,linewidth=.8)
