@@ -133,3 +133,5 @@ dmypy.json
 *.pdf
 *.tex
 *.txt
+*pickle
+!pip.freeze.juryselection.txt
