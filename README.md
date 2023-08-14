@@ -51,20 +51,23 @@ Description of programs/code
 
 - execute_all.sh Executes all code in the appropriate order
 - class_model_types.py contains the main Jurymodel class used to simulate juries.
-- juryConstruction.py contains code to generate all simulated juries needed to generate the paper and appendices figures and tables. Juries are saved in pickle format under output/
-- juryPlotsAndResults.py contains code to generate all figures and tables. Output is saved under exhibits/
-- class_jury_Statdisc.py
-extension of class_model_types.py to run simulations for the statistical discrimination section
+- juryConstruction.py contains code to generate all simulated juries needed to generate the paper and appendices figures and tables. Juries are saved in pickle format under Simulations/
+- juryPlotsAndResults.py contains code to generate all figures and tables. Output is saved under Exhibits/
+- class_jury_Statdisc.py extension of Jurymodel for the statistical discrimination section
 - juryStatdisc_sims.py
 generates all simulated juries needed for the statistical discrimination section
 - juryStatdisc_plots.py generates figures for the statistical discrimination section
 
 ### License for Code
 
-- the code is © Moro and Van der Linden. Please contact the authors if interested in using or modifying this code.
+- the code is © Moro and Van der Linden. Please contact the authors if you are interested in using or modifying this code.
 
 Instructions to Replicators
 ---------------------------
+
+### Using a Python installation (recommended, see note a) below)
+
+A pip freeze text file with required packages is included under directory Environment. Execute ```execute_all.sh``` from a shell, or run the python files in the order indicated in execute_all.sh in your preferred client/GUI using Code/ as your working directory
 
 ### Using Docker
 
@@ -74,18 +77,9 @@ After creating the docker image (with tag juryimage, that is run ```docker build
 
 ```docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh```
 
-### Using a python installation (recommended, see note a) below)
-
-A pip freeze text file with required packages is included under directory Environment. Execute execute_all.sh, or run the python files in the order indicated in execute_all.sh
-
 ### Notes
 
-a) running the code with docker will not format some of the figure labels with LaTeX, and some of the spacing will not match exactly the article figures. To generate LaTeX-formatted figures you need to have a LaTeX distribution in your system and then run the python commands in the following sequence using Code as working directory
-
-  1) python juryConstruction.py
-  2) python juryPlotsAndResults.py
-  3) python juryStatdisc_sims.py
-  4) python juryStatdisc_plots.py
+a) running the code with docker will not format some of the figure labels with LaTeX, and some of the spacing will not match exactly the article figures. To generate LaTeX-formatted figures you need to have a LaTeX distribution and Python in your system and then run the python files in the order indicated in execute_all.sh
 
 b) To speed up computations, some jury construction commands use Python's multiprocessing package with 6 processors as default. You may change the nprocs variable at the beginning of juryConstruction.py (row 17) and juryStatdisc_sims.py (row 20) at your convenience
 
