@@ -45,7 +45,7 @@ outputdir = '../Simulations/'
 
 # may need this to make sure LaTeX is found
 import os
-os.environ['PATH'] += '/Library/TeX/texbin'
+os.environ['PATH'] += ':/Library/TeX/texbin:/root/.TinyTeX/bin/x86_64-linux/'
 
 # checks if your system does not have or cannot read a LaTeX distribution.
 if shutil.which('latex'):
@@ -298,7 +298,6 @@ if __name__ == '__main__':
     ax2.spines['top'].set_visible(False)
 
     ax2.set_xlabel('Number of signals')
-    ax2.set_ylabel('Difference REP-STR')
     ax2.plot(stats75b['N'], 100*stats75b['diffAV'], '--', color=STRcolor, )
     ax2.plot(stats75b['N'], 100* stats75b['diffFrac'],  color=SARcolor, )
     l12= ax2.scatter(80,100*stats75b['diffAV'][-1:], color=STRcolor, marker='.')
@@ -313,7 +312,7 @@ if __name__ == '__main__':
     ax2.set_title('(a) Extreme polarization', fontsize=11)
 
     #labellines.labelLines(plt.gca().get_lines(), align=False, xvals=(-1.2,-1),bbox={'alpha': 0}, fontsize=10, )# align=False)
-    fig.legend(loc='upper left', title='Difference REP-STR', bbox_to_anchor=(0.22, 0.87), fontsize=8, title_fontsize=9, framealpha=1 )
+    fig.legend(loc='upper left', title='Difference '+rep_label+'-'+str_label, bbox_to_anchor=(0.22, 0.87), fontsize=8, title_fontsize=9, framealpha=1 )
     fig.tight_layout()
 
     if savefig:

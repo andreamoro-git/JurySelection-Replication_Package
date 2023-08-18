@@ -41,7 +41,7 @@ outputdir = '../Simulations/'
 
 #to make sure LaTeX is found
 import os
-os.environ['PATH'] += '/Library/TeX/texbin'
+os.environ['PATH'] += ':/Library/TeX/texbin:/root/.TinyTeX/bin/x86_64-linux/'
 
 # checks if your system does not have or cannot read a LaTeX distribution
 # and define labels accordingly
