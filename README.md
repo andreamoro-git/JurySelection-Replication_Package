@@ -65,23 +65,22 @@ generates all simulated juries needed for the statistical discrimination section
 Instructions to Replicators
 ---------------------------
 
-### Using a Python installation (recommended, see note a) below)
-
-A pip freeze text file with required packages is included under directory Environment. Execute ```execute_all.sh``` from a shell, or run the python files in the order indicated in execute_all.sh in your preferred client/GUI using Code/ as your working directory
-
 ### Using Docker
 
 A Dockerfile is included under directory Environment to replicate an environment suitable for proper code execution
 
-After creating the docker image (with tag juryimage, that is run ```docker build -t juryimage Environment/``` from the package root), run the following command from the package root directory:
+Execute run-docker.sh from the root directory. The file will generate a docker image called juryselectionimage and 
+then execute all the necessary code (see run-docker.sh for details)
 
-```docker run --init -it -v $(PWD)/:/juryselection -w /juryselection/Code juryimage ./execute_all.sh```
+### Using a Python installation
+
+A pip freeze text file with required packages is included under directory Environment. Execute ```execute_all.sh``` from a shell, or run the python files in the order indicated in Code/execute_all.sh in your preferred client/GUI using Code/ as your working directory
 
 ### Notes
 
-a) running the code with docker will not format some of the figure labels with LaTeX, and some of the spacing will not match exactly the article figures. To generate LaTeX-formatted figures you need to have a LaTeX distribution and Python in your system and then run the python files in the order indicated in execute_all.sh
+a) To speed up computations, some jury construction commands use Python's multiprocessing package with 6 processors as default. You may change the nprocs variable at the beginning of juryConstruction.py (row 17) and juryStatdisc_sims.py (row 20) at your convenience
 
-b) To speed up computations, some jury construction commands use Python's multiprocessing package with 6 processors as default. You may change the nprocs variable at the beginning of juryConstruction.py (row 17) and juryStatdisc_sims.py (row 20) at your convenience
+b) The code needs a LaTeX installation to format figure labels to match exactly the article figures. A minimal latex installation is included in the Dockerfile, fetched from TinyTeX. If for any reason the image fails to generate, you can comment out lines 14-23 in Environment/Dockerfile. The code will execute without LaTeX formatting
 
 List of figures, tables and programs
 ---------------------------
@@ -102,6 +101,7 @@ List of figures, tables and programs
 | Figure 12      | juryPlotsAndResults.py   | 1018 |  balanced.pdf                        |
 | Figure 13      | juryStatdisc_plots.py    | 320  |  std-beta.pdf                        | 
 
+Note: figures for the external appendix are generated but not included in this table
 
 ## Acknowledgements
 Social Science Data Editors template README file https://github.com/social-science-data-editors/template_README

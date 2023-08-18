@@ -9,7 +9,8 @@ RUN apt-get update
 # needs perl to run the command below
 RUN apt-get install perl wget -y  
 
-# fetch TinyTeX
+# fetch TinyTeX. If for any reason this were to fail, you can comment out
+# lines 14-23, the code will execute without LaTeX formatting
 RUN wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh 
 
 # add TinyTeX to PATH variable
