@@ -4,6 +4,24 @@ FROM python:3.9-slim
 
 WORKDIR /code/
 
+RUN apt-get update 
+
+# needs perl to run the command below
+RUN apt-get install perl wget -y  
+
+# fetch TinyTeX
+RUN wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh 
+
+# add TinyTeX to PATH variable
+ENV PATH="$PATH:/root/.TinyTeX/bin/x86_64-linux"
+
+# get LaTeX packages I need
+RUN /root/.TinyTeX/bin/x86_64-linux/tlmgr install type1cm cm-super underscore 
+
+#matplotlib wants dvipng as well (need to install it after tinytex to avoid some obscure version conflicts)
+RUN apt-get install dvipng -y
+
+# install python packages needed for my code
 RUN pip install -U --no-cache-dir \
     numpy==1.25.2 \
     matplotlib==3.7.2 \
