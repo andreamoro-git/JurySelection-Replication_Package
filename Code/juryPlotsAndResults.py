@@ -31,10 +31,10 @@ if publishedFigures == True:
     barcolors = barcolor2 = ['White']*3
     altcolor =  'White'
 
-figsize = 4.5
+figsize = 6
 figsize_single = 3.5
 labelfont = 9
-xylabelfont = 11
+xylabelfont = 10
 
 imagedir = '../Exhibits/'
 outputdir = '../Simulations/'
@@ -123,17 +123,27 @@ axd.set_xlabel('Conviction probability')
 
 axx.plot(x,ya_x,color=STRcolor,label='$f_a$')
 axx.plot(x,yb_x,'--',color=SARcolor,label='$f_b$')
-axx.set_title('(a) Extreme \n\n $f_a(c): Beta(1,5)$ \n $f_b(c): Beta(5,1)$', fontsize=xylabelfont)
+if publishedFigures == True:
+    axx.set_title('A \n\n $f_a(c): Beta(1,5)$ \n $f_b(c): Beta(5,1)$', fontsize=xylabelfont)
+else:
+    axx.set_title('(a) Extreme \n\n $f_a(c): Beta(1,5)$ \n $f_b(c): Beta(5,1)$', fontsize=xylabelfont)
 labellines.labelLines(axx.get_lines(), align=False, fontsize=xylabelfont, xvals=[.18,.82],bbox={'alpha': 0}, )
 
 axd.plot(x,ya_d,color=STRcolor,label='$f_a$')
 axd.plot(x,yb_d,'--',color=SARcolor,label='$f_b$')
-axd.set_title('(b) Moderate \n\n $f_a(c): Beta(2,4)$ \n $f_b(c): Beta(4,2)$', fontsize=xylabelfont)
+if publishedFigures == True:
+    axd.set_title('B \n\n $f_a(c): Beta(2,4)$ \n $f_b(c): Beta(4,2)$', fontsize=xylabelfont)
+else:
+    axd.set_title('(b) Moderate \n\n $f_a(c): Beta(2,4)$ \n $f_b(c): Beta(4,2)$', fontsize=xylabelfont)
 labellines.labelLines(axd.get_lines(), align=False, fontsize=xylabelfont, xvals=[.14,.86],bbox={'alpha': 0}, )
 
 axm.plot(x,ya_m,color=STRcolor,label='$f_a$')
 axm.plot(x,yb_m,'--',color=SARcolor,label='$f_b$')
-axm.set_title('(c) Mild \n\n $f_a(c): Beta(3,4)$ \n $f_b(c): Beta(4,3)$', fontsize=xylabelfont)
+if publishedFigures == True:
+    axm.set_title('C \n\n $f_a(c): Beta(3,4)$ \n $f_b(c): Beta(4,3)$', fontsize=xylabelfont)
+else:
+    axm.set_title('(c) Mild \n\n $f_a(c): Beta(3,4)$ \n $f_b(c): Beta(4,3)$', fontsize=xylabelfont)
+
 labellines.labelLines(axm.get_lines(), align=False, fontsize=xylabelfont, xvals=[.2,.8],bbox={'alpha': 0}, )
 
 fig.tight_layout()
@@ -212,9 +222,14 @@ labellines.labelLines(axm.get_lines(), align=False, fontsize=labelfont,
                       bbox={'alpha': 0},
                             )
 
-axx.set_title('(a) Extreme', fontsize=xylabelfont)
-axd.set_title('(b) Moderate', fontsize=xylabelfont)
-axm.set_title('(c) Mild', fontsize=xylabelfont)
+if publishedFigures == True:
+    axx.set_title('A', fontsize=xylabelfont)
+    axd.set_title('B', fontsize=xylabelfont)
+    axm.set_title('C', fontsize=xylabelfont)
+else:
+    axx.set_title('(a) Extreme', fontsize=xylabelfont)
+    axd.set_title('(b) Moderate', fontsize=xylabelfont)
+    axm.set_title('(c) Mild', fontsize=xylabelfont)
 fig.tight_layout()
 plt.savefig(imagedir+'prop1-beta-all.pdf')
 
@@ -371,8 +386,12 @@ labellines.labelLines(ax2.get_lines(), align=False, fontsize=labelfont,
                       bbox={'alpha': 0},
                             )
 
-ax.set_title('(a) Selected juror $c$ distribution',fontsize=xylabelfont)
-ax2.set_title('(b) Minority representation',fontsize=xylabelfont)
+if publishedFigures == True:
+    ax.set_title('A', fontsize=xylabelfont)
+    ax2.set_title('B', fontsize=xylabelfont)
+else:
+    ax.set_title('(a) Selected juror $c$ distribution',fontsize=xylabelfont)
+    ax2.set_title('(b) Minority representation',fontsize=xylabelfont)
 
 fig.tight_layout()
 plt.savefig(imagedir+'counterall.pdf')
@@ -618,11 +637,11 @@ for mod,val in valgr1.items():
 #Add some text for labels, title and custom x-axis tick labels, etc.
 handles, labels = ax2.get_legend_handles_labels()
 firstlegend = ax2.legend([handles[0],handles[4],handles[3]], [rep_label,str_label,ran_label], 
-                         loc='upper left',  bbox_to_anchor=(0,1.35), title=r'\% minorities in juries', 
+                         loc='lower left',  bbox_to_anchor=(0,1.35), title=r'Percentage of minorities in juries', 
                          title_fontsize=labelfont, 
                          ncol=2, fontsize=labelfont)
 secondlegend = ax2.legend([handles[8],handles[12],handles[7]], [rep_label,str_label,ran_label], 
-                          loc='upper left', bbox_to_anchor=(0.4,1.35), title=r'\% juries with minorities', 
+                          loc='upper left', bbox_to_anchor=(0.4,1.35), title=r'Percentage of juries with minorities', 
                           ncol=2, title_fontsize=labelfont, fontsize = labelfont)
 for t in secondlegend.get_texts():
     t.set_ha('left')
@@ -702,8 +721,12 @@ if __name__ == '__main__':
     ax2.plot(challenges, minSTR, '--', marker='o',fillstyle='none', color=STRcolor, label=str_label, linewidth=.4, markersize=3)
     labellines.labelLines(ax2.get_lines(), align=False, xvals=[7,8],yoffsets=[.015,-.012], bbox={'alpha': 0}, fontsize=labelfont, )# align=False)
     
-    ax.set_title('(a) Juries with at least 1 extreme', fontsize=xylabelfont)
-    ax2.set_title('(b) Minority representation', fontsize=xylabelfont)
+    if publishedFigures:
+        ax.set_title('A', fontsize=xylabelfont)
+        ax2.set_title('B', fontsize=xylabelfont)
+    else:
+        ax.set_title('(a) Juries with at least 1 extreme', fontsize=xylabelfont)
+        ax2.set_title('(b) Minority representation', fontsize=xylabelfont)
     ax2.set_ylim(.08,.19)
     ax2.set_yticks(np.arange(.1,.2,.02))
     fig.tight_layout()
