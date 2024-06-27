@@ -28,7 +28,6 @@ RUN pip install -U --no-cache-dir \
     matplotlib==3.7.2 \
     pandas==1.5.3 \
     scipy==1.10.1 \
-    matplotlib-label-lines==0.6.0 \
     contourpy==1.1.0 \
     cycler==0.11.0 \
     fonttools==4.42.0 \
