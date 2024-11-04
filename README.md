@@ -4,7 +4,7 @@
 !<img alt='minorities in juries' src='https://raw.githubusercontent.com/andreamoro-git/andreamoro-git.github.io/3f2975ad2b7474a7f84d1205d23ea4845cc5be3c/assets/images/std-logitnorm.png' />
 </p>
 
-Replication package for Andrea Moro and Martin Van der Linden: "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures." (2023), Forthcoming, Journal of Law and Economics. The paper is available at https://arxiv.org/abs/2102.07222 or from the authors' websites
+Replication package for Moro, Andrea, and Martin Van der Linden. "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures," The Journal of Law and Economics 67, pp. 295-336, May 2024. The paper is available at https://arxiv.org/abs/2102.07222 or from http://andreamoro.net/assets/papers/juryselection.pdf
 
 Bibtex Citation:
 
