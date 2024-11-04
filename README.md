@@ -9,13 +9,14 @@ Replication package for Andrea Moro and Martin Van der Linden: "Exclusion of Ext
 Bibtex Citation:
 
 ```
-@article{moro-vanderlinden-juryselection-2023,
+@article{moro-vanderlinden-juryselection-2024,
     title = "Exclusion of Extreme Jurors and Minority Representation: The Effect of Jury Selection Procedures",
     author = "Moro, Andrea and Martin {Van der Linden}",
-    year = "Forthcoming",
-    month = "",
+    year = "2024",
+    month = " May",
     journal = "The Journal of Law and Economics",
-    volume = "2102.07222",
+    volume = "67",
+    pages = "295-336",
     url = "http://andreamoro.net/assets/papers/juryselection.pdf"
 }
 ```
