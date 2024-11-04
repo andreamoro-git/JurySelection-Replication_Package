@@ -25,7 +25,7 @@ Bibtex Citation:
 Overview
 --------
 
-The code in this replication package constructs the simulated juries used to generate figures, tables, and other results in Moro and Van der Linden (Journal of Law and Economics, Forthcoming 2023) using Python.
+The code in this replication package constructs the simulated juries used to generate figures, tables, and other results in the paper and external appendix using Python.
 
 Data Availability and Provenance Statements
 ----------------------------
